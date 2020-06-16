@@ -1,0 +1,60 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\subsection{Functional systems in Scala}
+Scala is not a pure functional programming language. For this reason one has to
+be careful when choosing third party tools for creating functional programs.
+Some libraries may rely on mutable state or perform side effects in order to
+perform their actions, which would break referential transparency.
+
+One first approach to deal with this problem would be to decide having ``mostly
+functional'' programs. The problem is that as [[citation]] shows, thinking that
+this mixture would give the benefits of functional programs is a
+fallacy. Referential transparency is given or not, there is no middle ground. If
+some of the elements which compose a program are not referentially transparent
+this is propagated to the whole program.
+
+For this reason when choosing libraries it is important to choose foundationally
+functional ones. In the case of study presented in this section the Cats library [[citation]]
+will be the foundation for building functional programs.
+
+Its documentation describes it as ``a library which provides abstractions for
+functional programming in the Scala programming language. ... A broader goal of
+Cats is to provide a foundation for an ecosystem of pure, typeful libraries to
+support functional programming in Scala applications''.
+
+At its core Cats provides among its abstraction a set of type classes and
+datatypes, the majority of this type classes are categories from Category Theory
+such as Monad, Monoid or Functor, with instances for many relevant types. But
+there are also utility type classes, like the Show typeclass which was shown in
+the Section 2.
+
+However Cats doesn't provide any utility for interacting with the real world in
+a functional way. There is a separate project, Cats-effect, which ``aims to
+provide a standard IO type for the Cats ecosystem, as well as a set
+of typeclasses (and associated laws) which characterize general effect types.''.
+This IO type was the one presented in section [[Section]] and its data type
+provide a set of operations to work with I/O operations such as reading from a
+database or communicating through the network.
+
+One element mentioned in the IO section was the fact that running the IO was the
+element which made referential transparency lost, and thus it should be the last
+operation done in the application. Cats Effect provides \texttt{IOApp} which is
+a safe wrapper of a Scala app which expects an \texttt{IO} and runs it. Ensuring
+that programs can remain purely functional without exposing any kind of impurity
+
+\section{Serving a Web Server}
+On top of Cats-effect, http4s provides a typeful, functional and streamed model
+for http servers.
+
+Http4s routes are modeled as a Kleili Category, \mbox{\texttt{Kleisli[OptionT[F,
+*], Request, Response]}}, or simplified, \mbox{\texttt{Request => F[Option[Response]]}},
+what this mean is that the application routes accept a request and return and
+effectful optional response\footnote{In our study case this effect \texttt{F}
+  will always be \texttt{IO}}. The return must be effectful because handling the
+response may imply performing a side effect such as reading from the database or
+accessing a resource from the network, and the response has to be optional
+because the given route may not have an appropiate handler.
+
+\end{document}
