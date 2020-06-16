@@ -138,7 +138,7 @@ figure \ref{fig:futurelatency}
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth1]{futurelatency.png}
+  \includegraphics[width=0.75\textwidth]{futurelatency.png}
   \caption{\label{fig:futurelatency}
     At the left of the figure a sequential run of the blocking operations. At
     the right a parallel execution which combines the results
@@ -171,10 +171,13 @@ of Futures, but not of running them.
 \subsection{The IO monad as a referential transparent Future}
 Future has many properties that make it an appropiate construct for modeling
 asynchronous operations. However its operations are not referential transparent.
-By the definition of
-it, if Future was referentially transparent the result of the operations on a
+By the definition of it, if Future was referentially transparent the result of the operations on a
 Future should be the same regardless if they operation functions were composed
-directly or if by saved in variables.
+directly or if saved in variables.
+
+The project Cats Effect [[Insert ref]] provides a standard \texttt{IO} for
+Scala. This \texttt{IO} provides both synchronous and asynchronous evaluation
+models. IO provides a referent
 
 \lstinputlisting[
 caption=An example of how Future is not referentially transparent,

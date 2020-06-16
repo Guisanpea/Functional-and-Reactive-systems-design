@@ -8,16 +8,15 @@ val ioByVariable = {
   for {
     a <- x
     b <- x
+    _ <- IO(println((a, b)))
   } yield (a, b)
-}
+}.unsafeRunAsync(_ => ())// (-1155484576,-723955400)
 
 val ioByComposition = {
   val random = new Random(0L)
   for {
     a <- IO(random.nextInt)
     b <- IO(random.nextInt)
+    _ <- IO(println((a, b)))
   } yield (a, b)
-}
-
-println(ioByVariable.unsafeRunSync()) // (-1155484576,-723955400)
-println(ioByComposition.unsafeRunSync()) // (-1155484576,-723955400)
+}.unsafeRunAsync(_ => ())// (-1155484576,-723955400)
