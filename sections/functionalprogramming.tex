@@ -13,9 +13,9 @@ which programs are structured as a composition of pure functions
 
 Pure functions, in contrast to function constructs of programming languages,
 % https://english.stackexchange.com/questions/7642/what-is-the-difference-between-by-contrast-and-in-contrast
-refer to the mathematical concept of a function. In mathematics, ``a function \textit{f}
+refer to the mathematical concept of a function. In mathematics, \enquote{a function \textit{f}
 from A to B, where A and B are non-empty sets, is a rule that associates with
-each element of A (the domain) a unique element of B (the codomain)''
+each element of A (the domain) a unique element of B (the codomain)}
 \autocite{NicholsonTheMathematics}.
 % cambia todos los entrecomillados que tengas tal como he hecho arriba 
 % https://tex.stackexchange.com/questions/531/what-is-the-best-way-to-use-quotation-mark-glyphs
@@ -27,8 +27,8 @@ each element of A (the domain) a unique element of B (the codomain)''
 
 
 Although this is the mathematical definition, in the domain of programming
-languages, it could also be stated that "a pure function has no observable effect
-on the execution of the program other than to compute a result given its inputs"
+languages, it could also be stated that \enquote{a pure function has no observable effect
+on the execution of the program other than to compute a result given its inputs}
 \autocite{Chiusano2013FunctionalScala}.
 
 Function constructs in many programming languages don't have the
@@ -447,8 +447,8 @@ structures as mutable ones. In Java, the Collection class, root in the hierarchy
 of a great number of data structures, defines most of its operations as mutable ones
 \autocite{Collection}. As an example, the method \texttt{add} has the following definition
 \texttt{boolean add(E e)}. The returned type of the method is a boolean which,
-according to the documentation, "is true if this collection changed as a result
-of the call". This description implies that mutation has been done in place.
+according to the documentation, \enquote{is true if this collection changed as a result
+of the call}. This description implies that mutation has been done in place.
 
 The main problem with this is that libraries that want to subclass the Java
 Collections API and be compatible with the standard library have to maintain
@@ -458,11 +458,11 @@ serving only as immutable representations of data structures but not providing a
 rich set of operations to use them.
 
 Scala, for example, provides two type of collections. Immutable and mutable ones.
-Scala documentation states "Scala collections systematically distinguish between
+Scala documentation states \enquote{Scala collections systematically distinguish between
 mutable and immutable collections. A mutable collection can be updated or
 extended in place. This means you can change, add, or remove elements of a
 collection as a side effect. Immutable collections, by contrast, never change.
 You have still operations that simulate additions, removals, or updates, but
 those operations will in each case return a new collection and leave the old
-collection unchanged" \autocite{MutableDocumentation}.
+collection unchanged} \autocite{MutableDocumentation}.
 \end{document}
