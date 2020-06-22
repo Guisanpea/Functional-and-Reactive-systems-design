@@ -35,6 +35,7 @@ Monad typeclass in Scala is shown.
 
 \lstinputlisting[
 caption=The monad trait,
+float=h,
 captionpos=b,
 label={lst:monad}
 ]{Monad.sc}
@@ -59,6 +60,7 @@ the monad was empty and no transformation could be applied.
 
 \lstinputlisting[
 caption=The option monad instance,
+float=h,
 captionpos=b,
 label={lst:optionmonad}
 ]{OptionMonad.sc}
@@ -72,9 +74,10 @@ meaning an error.
 
 \lstinputlisting[
 caption=The either monad instance,
+float=h,
 captionpos=b,
 label={lst:eithermonad}
-]{OptionMonad.sc}
+]{EitherMonad.sc}
 
 \paragraph{State Monad}
 The State Monad is an effect which given an state of type \texttt{S} performs an state
@@ -87,9 +90,10 @@ avoiding to explicitly pass the state all along the way as shown in Listing \ref
 
 \lstinputlisting[
 caption=The state monad instance,
+float=h,
 captionpos=b,
 label={lst:statemonad}
-]{OptionMonad.sc}
+]{StateMonad.sc}
 
 \paragraph{IO Monad}
 Side effects are inherently non functional. A side effect such as reading input
@@ -204,6 +208,7 @@ models. IO provides a referent
 
 \lstinputlisting[
 caption=An example of how Future is not referentially transparent,
+float=h,
 captionpos=b,
 label={lst:impurefuture}
 ]{ImpureFuture.sc}
@@ -222,6 +227,7 @@ variable without losing referential transparency as Listing \ref{lst:pureio}
 
 \lstinputlisting[
 caption=The IO Monad does not cache values and is referentially transparent,
+float=h,
 captionpos=b,
 label={lst:pureio}
 ]{PureIO.sc}
