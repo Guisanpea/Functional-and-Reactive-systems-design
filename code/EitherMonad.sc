@@ -1,10 +1,12 @@
+import $plugin.$ivy.`org.typelevel::kind-projector:0.10.3`
 import $file.Monad, Monad._
 
-implicit val optionMonadInstance: Monad[Option] = new Monad[Option] {
-  def unit[A](a: => A): Option[A] = Some(a)
+implicit def eitherMonadInstance[Err]: Monad[Either[Err, *]] =
+  new Monad[(Either[Err, *])] {
+    override def unit[A](a: => A): Either[Err, A] = Right[Err, A](a)
 
-  override def flatMap[A, B](ma: Option[A])(f: A => Option[B]): Option[B] = ma match {
-    case Some(value) => f(value)
-    case _ => None
+    override def flatMap[A, B](ma: Either[Err, A])(f: A => Either[Err, B]): Either[Err, B] = ma match {
+      case Right(value) => f(value)
+      case Left(err) => Left[Err, B](err)
+    }
   }
-}

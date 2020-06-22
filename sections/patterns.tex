@@ -8,12 +8,12 @@
 \begin{document}
 
 \subsection{Improving Resilience with Computational effects}
-In 1991 Eugenio Moggi [[Insert citation]] described a model in category theory
-for separating the set of values a object \texttt{A} could have from the notion
-of a computation of it, \texttt{T A}, which had an effect on top of this type.
-This computation abstracts from the type \texttt{A} the posible results that the
-computation could have. Some examples of computations mentioned on the text of
-interest to this topics are.
+In 1991 Eugenio Moggi \autocite{MoggiNotionsMonads} described a model
+in category theory for separating the set of values a object \texttt{A} has from
+the notion of a computation of it, \texttt{T A}, which had an effect on top of
+this type. This model abstracts from the type \texttt{A} the possible
+results that the computation could have. Some examples of computations mentioned
+on the text of interest to this topics are.
 
 \begin{itemize}
 \item Side effects that modify an set of possible states \texttt{S}: \texttt{State[A, S]}
@@ -21,24 +21,29 @@ interest to this topics are.
 \item Interactive Input/Output which results in an \texttt{A} value: \texttt{IO[A]}
 \end{itemize}
 
-From a programming point of view a very interesting finding of that article is
-that this effect over \texttt{A} can be abstracted and define operations that transform
-the type A regardless of the effect in which it was contained as long as the
-effect \texttt{F} is a monad. %% Is a monad? Has a monad?
+From a functional programming perspective a very interesting finding of that
+article is that this effect over \texttt{A} can be abstracted and define
+operations that transform the type A regardless of the effect in which it is
+contained as long as the effect \texttt{F} has a monad instance. %% Has a monad?
+                                %% Is a monad?
 
 \subsubsection{Monads}
 A monad is category that provides two operations over a type constructor
-\texttt{F[\_]}, \texttt{flatMap}\footnote{On literature is also usually called bind} and
-\texttt{pure}\footnote{Also known as point or return}. In the following figure the a
-trait that defines the Monad typeclass in Scala is defined.
+\texttt{F[\_]}, \texttt{flatMap}, also usually called bind, and \texttt{pure},
+known to as point or return. In Listing \ref{lst:monad}, the trait that defines the
+Monad typeclass in Scala is shown.
 
-[[Example]]
+\lstinputlisting[
+caption=The monad trait,
+captionpos=b,
+label={lst:monad}
+]{Monad.sc}
 
 The semantics of the operations can be inferred by following the types of them.
 The pure function takes a value \texttt{a} and lifts it to the monad context
 \texttt{F}. The flatMap operation takes a monad \texttt{F[a]} and a function
 which transform an \texttt{a} into a monad with the same context but a possible
-different type \texttt{F[B]}. This operation mantains the monad context.
+different type inside \texttt{F[B]}. This operation mantains the monad context.
 
 \subsection{Example of monadic effects}
 Then some monads instances can be defined for different effects.
@@ -50,7 +55,13 @@ that the value is present or \texttt{None} meaning that there is no value.
 
 The function flatMap in this case returns a transformed \texttt{Some} if the monad in which
 it was applied was also a \texttt{Some} or directly returns a \texttt{None} if
-the monad was empty and no transformation could be applied
+the monad was empty and no transformation could be applied.
+
+\lstinputlisting[
+caption=The option monad instance,
+captionpos=b,
+label={lst:optionmonad}
+]{OptionMonad.sc}
 
 \paragraph{Either Monad}
 When a function can either succeed or fail the Either Effect encodes this
@@ -59,6 +70,12 @@ disjoint values. Either are usually right biased, being the \texttt{A} or
 ``right'' value the one meaning the success and the \texttt{E} value the one
 meaning an error.
 
+\lstinputlisting[
+caption=The either monad instance,
+captionpos=b,
+label={lst:eithermonad}
+]{OptionMonad.sc}
+
 \paragraph{State Monad}
 The State Monad is an effect which given an state of type \texttt{S} performs an state
 transition resulting in a value of type \texttt{A}, modeling an state machine.
@@ -66,7 +83,13 @@ As state cannot be mutated in place the state transation returns both the new
 state and the resulting value. It can be defined this way
 
 When using the state monad flatMap directly returns a monad with the new state
-avoiding to explicitly pass the state all along the way.
+avoiding to explicitly pass the state all along the way as shown in Listing \ref{lst:statemonad}.
+
+\lstinputlisting[
+caption=The state monad instance,
+captionpos=b,
+label={lst:statemonad}
+]{OptionMonad.sc}
 
 \paragraph{IO Monad}
 Side effects are inherently non functional. A side effect such as reading input
@@ -91,7 +114,7 @@ the interpretation of the side effects which is usually done as the last step of
 the computation. Usually, in order to avoid running the execution of the side
 effects manually, the entry function of the application expects an IO to be
 returned which will be then be interpreted. This is exactly what the main method
-of Haskell does [[Insert reference]]
+of Haskell does \autocite{AIO}
 
 \subsubsection{The resilience of computational effects}
 In static typed programming languages computational effects offers a greater resilience as the
@@ -118,7 +141,7 @@ thread of the future itself.
 A Future can be created using the \texttt{apply} method of the companion object
 of the trait \texttt{Future}. An invocation have this form
 \texttt{Future(\textit{expr})}. This would evaluate expr in the background. The
-call returns immediatly with a result of type Future[A], being A the result type
+call returns immediatly with a result of type \texttt{Future[A]}, being A the result type
 of the expression \texttt{\textit{expr}}.
 
 \subsubsection{Making models reactive by the use of Futures}
@@ -162,7 +185,7 @@ request can be met and the request start to be stacked. Moment in which latency
 starts to increase in a great manner.
 
 Futures have an implicit parameter which defines the execution context in which
-the future expression will be ran. [[cite execution context from API]]. An
+the future expression will be ran \autocite{ScalaScala.concurrent.ExecutionContext}. An
 execution context may have associated an specific thread pool. This can be used
 for making the blocking calls to be executed in a separate pool for blocking
 tasks, freeing the main thread thread pool which is only responsible of spawning the tasks
@@ -175,7 +198,7 @@ By the definition of it, if Future was referentially transparent the result of t
 Future should be the same regardless if they operation functions were composed
 directly or if saved in variables.
 
-The project Cats Effect [[Insert ref]] provides a standard \texttt{IO} for
+The project Cats Effect \autocite{CatsHome} provides a standard \texttt{IO} for
 Scala. This \texttt{IO} provides both synchronous and asynchronous evaluation
 models. IO provides a referent
 

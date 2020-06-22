@@ -9,15 +9,16 @@ Some libraries may rely on mutable state or perform side effects in order to
 perform their actions, which would break referential transparency.
 
 One first approach to deal with this problem would be to decide having ``mostly
-functional'' programs. The problem is that as [[citation]] shows, thinking that
+functional'' programs. The problem is that this not completely functional
+programming model does not work \autocite{MeijerTheWork}, thinking that
 this mixture would give the benefits of functional programs is a
 fallacy. Referential transparency is given or not, there is no middle ground. If
 some of the elements which compose a program are not referentially transparent
 this is propagated to the whole program.
 
 For this reason when choosing libraries it is important to choose foundationally
-functional ones. In the case of study presented in this section the Cats library [[citation]]
-will be the foundation for building functional programs.
+functional ones. In the case of study presented in this section the Cats library
+\autocite{Cats:Home} will be the foundation for building functional programs.
 
 Its documentation describes it as ``a library which provides abstractions for
 functional programming in the Scala programming language. ... A broader goal of
@@ -34,7 +35,7 @@ However Cats doesn't provide any utility for interacting with the real world in
 a functional way. There is a separate project, Cats-effect, which ``aims to
 provide a standard IO type for the Cats ecosystem, as well as a set
 of typeclasses (and associated laws) which characterize general effect types.''.
-This IO type was the one presented in section [[Section]] and its data type
+This IO type was the one presented in the monads section and its data type
 provide a set of operations to work with I/O operations such as reading from a
 database or communicating through the network.
 
@@ -44,17 +45,443 @@ operation done in the application. Cats Effect provides \texttt{IOApp} which is
 a safe wrapper of a Scala app which expects an \texttt{IO} and runs it. Ensuring
 that programs can remain purely functional without exposing any kind of impurity
 
-\section{Serving a Web Server}
-On top of Cats-effect, http4s provides a typeful, functional and streamed model
-for http servers.
+\subsection{Representing lazy sequences with Streams}
+One of the main concerns of the \texttt{IO} datatype is to separate computation
+descriptions from the evaluation of them. They represent a computation to be
+made, which when evaluated will produce a single value. However there are some
+situations in which rather than obtaining a single value the programmer may be
+interested in receiving an streams of value to be processed. A typical example
+of this would be working with I/O sources like obtaining the lines of a source
+file.
 
-Http4s routes are modeled as a Kleili Category, \mbox{\texttt{Kleisli[OptionT[F,
-*], Request, Response]}}, or simplified, \mbox{\texttt{Request => F[Option[Response]]}},
+This stream of data needs not be consumed entirely, a function may attempt to
+obtain a line of a file matching an specific criteria. As soon as the line is
+found the rest of the file isn't needed to be scan. Although a function which does
+this specific operation can be expressed using \texttt{IO} the lazy
+representation of obtaining the lines of the file can not be expressed by it. For this
+reason the Stream datatype is created.
+
+The datatype which will be used in the study case is the one provided by FS2, it
+is an acronym for \textbf{Functional Streams for Scala} and provides ``purely
+functional, effectful, and polymorphic stream processing'' \ref{Fs2:Home}
+
+A fs2 stream has the following type definition \texttt{Stream[+F[\_], +O]}. In
+this definition \texttt{O} is the type of the elements which are contained in
+the streams and \texttt{F} is the kind which evaluates the effects that the
+descriptions of the values of the streams may have. In the case of study, this
+effects will be wrapped by \texttt{IO} if the description are effectful or by
+\texttt{Pure} in case that the operation implies no effect.
+
+For example the previously mentioned function for getting the first line of a
+file matching a criteria can be implemented with FS2 in a functional manner like
+shown in Listing \ref{lst:findlinestream}.
+
+\lstinputlisting[
+float=h,
+caption=Finding the first line matching a criteria with streams,
+captionpos=b,
+label={lst:findlinestream}
+]{FindLine.sc}
+
+When implementing functional programs Stream will be a good representation when working with
+potentially unbounded, non strict and sequential sources of data.
+
+\subsection{Serving a Web Server}
+On top of Cats-effect, http4s provides a typeful, functional and streamed model
+for creating http servers.
+
+Http4s routes are modeled as \mbox{\texttt{Kleisli[OptionT[F,
+*], Request, Response]}}, or simplifying the Kleisli Category, \mbox{\lstinline{Request => F[Option[Response]]}},
 what this mean is that the application routes accept a request and return and
 effectful optional response\footnote{In our study case this effect \texttt{F}
   will always be \texttt{IO}}. The return must be effectful because handling the
 response may imply performing a side effect such as reading from the database or
 accessing a resource from the network, and the response has to be optional
 because the given route may not have an appropiate handler.
+
+\texttt{Request} and \texttt{Response} datatype encode the Http requests and
+responses. One interesting element of them is that the body of this request is
+represented with the type \texttt{EntityBody[+F[\_]]}. And when looking to its
+type definition the entity body is defined as
+\lstinline{type EntityBody[+F[\_]] = Stream[F, Byte]}.
+When defining http4s it was mentioned that it provided a streamed model for
+http. This streaming model is very important for reactive applications. If a
+request was not streamed the response time of the web
+server would be
+
+\begin{center}
+$(\text{latency of receiving the request and processing} +
+\text{web server operations latency})$
+\end{center}
+
+as the whole request has to be processed on its
+entirety before being able to work on it. If the request is streamed both
+the processing of the request and the operations on them can be interleaved
+reducing the overall latency of the request. This can also be applied for the
+response, as the response body is also modeled as an \texttt{EntityBody}. By
+providing a streamed model of Http the applications reactivity is increased by
+terms of responsiveness.
+
+To create handlers for Http requests http4s provides the \texttt{HttpRoutes.of[F]} method, which accepts a partial
+function \texttt{Request => F[Response[F]]} and lifts it into \texttt{OptionT}
+being it None in case that the partial function is not defined or Some in case
+it is. For example the routes for the \texttt{/players} resource of the
+application is presented in Listing \ref{lst:playerresource}.
+
+\begin{lstlisting}[
+  float=h,
+  captionpos=b,
+  label=lst:playerresource,
+  caption={The router for the \texttt{players} resource, routes implementation is omitted for brevity}
+  ]
+  private val routes: HttpRoutes[F] = HttpRoutes.of[F] {
+    case GET -> Root =>
+      ???
+    case GET -> Root / FUUIDVar(id) =>
+      ???
+    case POST -> Root =>
+      ???
+  }
+\end{lstlisting}
+
+HttpRoutes has a SemigroupK instance so it provides the \texttt{combineK} method
+for combining a set of routes into a greater router. Thus, with the SemigroupK
+instance in place an application router can be composed from other routes as Listing
+\ref{lst:combineroutes} shows.
+
+\begin{lstlisting}[
+  float=h,
+  captionpos=b,
+  label=lst:combineroutes,
+  caption={The router for the whole application}
+  ]
+  private def httpApp[F[_]](): Kleisli[F, Request[F], Response[F]] = (
+    PlayerController.qualifiedRoutes
+    <+>
+    MatchController.qualifiedRoutes
+  ).orNotFound
+\end{lstlisting}
+
+\subsection{Accessing a database}
+For working with persistent data within an IO Doobie provides a monadic API for describing
+queries and commands on a database. Operations in Doobie return descriptions of
+computations within a context. For example the \texttt{ConnectionIO[A]} type
+describes queries and commands that can be expressed when a
+\texttt{java.sql.Connection} is available and that returns a value of type
+\texttt{A} when interpreted. Internally ConnectionIO values are represented as a
+free monad. This means that ConnectionIO are combinable with high level
+operators such as flatMap, or even be foldabled. Listing \ref{lst:queryconnectionio} shows an
+example of how to build and combine \texttt{ConnectionIO} values.
+
+\begin{lstlisting}[
+  float=h,
+  captionpos=b,
+  label=lst:queryconnectionio,
+  caption={A database query which returns a tuple}
+  ]
+  val dbValues: ConnectionIO[(Int, Double)] =
+  for {
+    a <- sql"select 42".query[Int].unique
+    b <- sql"select random()".query[Double].unique
+  } yield (a, b)
+\end{lstlisting}
+
+Although this values represent queries to a database they are agnostic about
+specific details like how or where they are going to be ran. This is
+responsability of the Transactor data type.
+
+\texttt{Transactor} has information about the connection details for the
+database but also has information about which execution contexts are being used
+for the different operations on the database. One of them is the
+\texttt{connectEC} in which threads will be waiting for acquiring a database
+connection and also the thread pool in which already connected threads will be
+blocked wating for results. This Transactor is parametrized over an effectful
+Monad \texttt{F} target.
+
+Once a transactor is available it can be passed to a ConnectionIO and move the
+descriptions to the chosen effectful monad where the description of the
+operations to be performed are no longer dependent on the context of
+\texttt{java.sql.Connection} but operation descriptions deferred on \texttt{IO}
+
+\subsubsection{Reducing queries mantainance and improving type safety with Quill}
+Database schemas evolve over time. Users interests change in the timeline and in
+software developed is common to need to adapt over time. It is important to
+write code that is able to adapt to this changes and require minimum changes
+when evolutions occur.
+
+If queries on the database are done with plain SQL, as changes to the underlying
+representation are made this queries must be rewritten, for this reason Quill
+provides a Scala case class to Database schema mapping. This queries are
+resolved to an internal abstract syntax tree for Quill and translated to a
+database query at compile time, having a low runtime overhead, this queries can
+even be validated at compile time against the database resulting in a
+compilation error in case that the mapping has been incorrectly done.
+
+Quill query model is based in ``a  practical  theory  of  language-integrated
+query  based  on quotation and normalisation of quoted terms'' \autocite{CheneyAQuery} and
+is able not only able to map case classes to database queries but provide
+database queries as for comprehensions and normalization of nested queries to
+provide efficient database access for applications.
+
+Queries are type safe as they are performed over a case class but even have
+capabilities such as returning optional values when a value may be missing.
+
+For example the query shown in Listing \ref{lst:matchquery} extracted for the companion application gets a tennis
+match from the database with each player information and points for each set and
+even the potential winner of it as an optional value given that it is acquired
+as a left join.
+
+\begin{lstlisting}[
+float=h,
+captionpos=b,
+label=lst:matchquery,
+caption={A Quill query returning all the elements of a match}
+]
+  private def findAllMatches =
+    quote {
+      val tennisMatchQuery = querySchema[TennisMatchTable]("tennis_match")
+      for {
+        tMatch <- tennisMatchQuery.sortBy(_.id)
+        winner <- query[Player].leftJoin(w => tMatch.winner.contains(w.id))
+        player1 <- query[Player].join(_.id == tMatch.player1)
+        player2 <- query[Player].join(_.id == tMatch.player2)
+        sets <- querySchema[TennisSetTable]("tennis_set")
+        .join(_.matchId == tMatch.id)
+      } yield (tMatch, winner: Option[Player], player1, player2, sets)
+    }
+\end{lstlisting}
+
+\subsubsection{Streaming database records}
+As presented on the http section, when streaming information the application
+response times are improved. For this reason Doobie provides a way to return
+database elements in a streamed manner. This combined with http streaming allows
+to improve the overall latency in a great manner.
+
+To return streamed content with quill it is only needed to apply the
+\texttt{io.getquill.context.stream} function to the quoted query. If combined
+with the query of Listing \ref{lst:matchquery} to stream it it would only be
+needed to do it like this. \texttt{stream(findAllMatches)}, this query would
+nevertheless need to be transacted as any other Doobie request.
+
+\subsection{Making systems reactive with actors}
+The main trait which made systems reactive was the use of message passing. One
+tool that can be used for modeling message driven architectures is the Actor
+model. Its origin dates back to  1973 \autocite{HewittAFormalism}, when they were shown as a way to
+model artificial intelligence. At a later moment in 1985 the Actor Model was
+presented as a model of concurrency for distributed systems \autocite{Agha1985ACTORS:Systems}.
+
+The
+actor model is a great model for efficient distributed systems because it
+accomplish the three traits that reactive systems have to meet to be responsive.
+Actors by definition communicate by messages. Actors don't share state nor share
+code. They consist of an internal state and communicate through messages
+
+Actors implementations such as Erlang processes and Akka Actors are also resilient.
+Supervision trees is the way of having fault tolerant systems within this
+concurrency model. In a Supervision tree there are actors whose responsability
+is monitor the behaviour of actors in the systems. This supervisors are able to
+restart actors and thus gracefully recover from errors in case they occur
+\autocite{ErlangBehaviour}, \autocite{SupervisionDocumentation}.
+
+Finally actors are also elastic because an actor functionality is self
+contained. As they receive messages and have a self contained state an actor can be
+multiplied, in case that the actor is not able to cope with the load it is
+required more actors can be summoned and the messages can be load balanced
+according to the availability of them.
+
+\subsubsection{Making functional actors}
+Akka was mentioned before as an implementation of the Actor Model in Scala,
+however Akka Actors are slightly composable. Its message passing semantics rely
+highly on side effects and its internal state is modeled using unsafe mutable
+primitives which make them non referentially transparent.
+
+For this reason in the scope of functional systems an actor primitive has been
+developed to allow the benefits of asynchronous message passing but in a
+referential transparent manner.
+
+To design the actor every element of an element will be analyzed to come up with
+an implementation fulfilling the requirements.
+
+In first place it is needed a mechanism for receiving request and obtaining a
+response. It will be called Mailbox and is a type representing a function
+\lstinline{mailbox: Input => F[Output]}. As one of the concerns with actors was
+composability this mailbox is highly composable as this function can be wrapped
+in a Kleisli and as long as \texttt{F} has a monad instance, as is the case of
+\texttt{IO}, the Kleisli will also have a monad instance.
+
+As multiple request can come to the actor at a given time a data structure for
+storing the multiple messages is needed to hold the incoming messages. For this
+purpose fs2 provides a FIFO Queue data structure which holds the messages that
+come to the actor.
+
+In this queue it will not only be saved the input to the actor but also a
+\texttt{Deferred} structure. Deferred models a value that will be present at a
+later point in time. Its \texttt{get} method will block until an element is set
+with its \texttt{complete} method, in our case the actor responsible for
+handling the request.
+
+As the element may not be delivered at any point on time
+a timeout can be provided to avoid deadlocks. For this reason the Concurrent
+typeclass provides the \texttt{race} method which accepts another equal effect
+\texttt{F} and returns an \texttt{F[Either[A,B]]} being A the type
+wrapped in the effect in which race was called and B the type that the effect
+which was applied to race had. If the former is the first to be completed the
+either will have its value and in the other case it will have the \texttt{B}
+value.
+
+To provide a timeout the deferred get can be raced against the a timer that is
+asleep for the timeout parameter time, if no timeout is provided the response
+will be raced against the receiver thread because if the actor thread is killed
+it is guaranteed that the request will never be processed.
+
+With all this elements the Mailbox implementation is presented in Listing
+\ref{lst:mailbox}.
+
+
+\begin{lstlisting}[
+float=h,
+captionpos=b,
+label=lst:matchquery,
+caption={A Purely functional mailbox implementation}
+]
+  object Mailbox {
+
+    type Mailbox[F[_], Input, Output] = Input => F[Output]
+
+    def apply[Output, Input, F[_] : Concurrent : Monad](
+      queue: Queue[F, (Input, Deferred[F, Output])],
+      receiver: Fiber[F, Unit],
+      timeout: FiniteDuration = 0.seconds
+    )(
+      implicit timer: Timer[F], F: MonadError[F, Throwable]
+    ): Mailbox[F, Input, Output] = (input: Input) => {
+      def getTimeout: F[Unit] =
+        if (timeout <= 0.seconds) receiver.join
+        else timer.sleep(timeout)
+
+      def getTimeoutError: Throwable =
+        if (timeout <= 0.seconds) FiberTerminatedException
+        else TimeoutException
+
+      for {
+        deferredResponse <- Deferred[F, Output]
+        _ <- queue.offer1((input, deferredResponse))
+        output <- (getTimeout race deferredResponse.get)
+        .map {
+          case Right(a) => Some(a)
+          case _ => F.raiseError(getTimeoutError)
+        }
+      } yield (output)
+    }
+  }
+\end{lstlisting}
+
+Once the mailbox is available the next step is to create the actor responsible
+of managing the Mailbox. When creating actors the programmer can choose to have
+an stateful actor which can have an internal state and produce a response based
+on its input and its state while producing a state transition. For managing the
+state the Ref datatype \autocite{Cats-effectCats.effect.concurrent.Ref} will be
+used, which allows to have a mutable state.
+
+The actor will start its corresponding state, if applicable, and then a queue
+for the mailbox, then the fiber containing the actor receiver function is
+created, and lastly a mailbox with the reference to the actor fiber and queue are
+created, being it returned so that the clients can send requests to the actor.
+Listings \ref{lst:statefulactor} and {lst:statelessactor} show the
+stateful and stateless actor implementation respectively.
+
+\begin{lstlisting}[
+float=h,
+captionpos=b,
+label=lst:statefulactor,
+caption={A stateful actor implementation}
+]
+def from[
+    F[_] : Concurrent : Monad : Timer,
+    State,
+    Input,
+    Output
+  ](
+    initialState: State,
+    receive: (Input, Ref[F, State]) => F[Output]
+  ): F[Mailbox[F, Input, Output]] =
+    for {
+      state <- Ref.of[F, State](initialState)
+      queue <- Queue.unbounded[F, (Input, Deferred[F, Output])]
+      receiver <- receiver(receive, state, queue)
+      mailbox = Mailbox(queue, receiver)
+    } yield (mailbox)
+\end{lstlisting}
+
+\begin{lstlisting}[
+float=h,
+captionpos=b,
+label=lst:statelessactor,
+caption={A stateless actor implementation}
+]
+  def from[
+    F[_] : Concurrent : Monad : Timer,
+    Input,
+    Output
+  ](
+    receive: (Input) => F[Output]
+  ): F[Mailbox[F, Input, Output]] =
+    for {
+      queue <- Queue.unbounded[F, (Input, Deferred[F, Output])]
+      receiver <- statelessReceiver(receive, queue)
+      mailbox = Mailbox(queue, receiver)
+    } yield (mailbox)
+\end{lstlisting}
+
+The receiving function for each actor will then
+
+\begin{enumerate}
+\item Dequeue an element of the queue with its corresponding response
+  \texttt{Ref} holder. The queue implementation will block until an element is
+  available.
+\item Apply the receive function that the programmer has provided for the input
+  and the corresponding state
+\item Mark the response \texttt{Ref} as complete.
+\end{enumerate}
+
+This will be repeated forever in a loop until the fiber associated with the
+actor is terminated. Listings \ref{lst:statefulactorreceiver} and
+\ref{lst:statelessactorreceiver} shows the receive function again for stateful
+and stateless actors.
+
+\begin{lstlisting}[
+float=h,
+captionpos=b,
+label=lst:statefulactorreceiver,
+caption={The receiving function for a stateful actor}
+]
+  private def receiver[Output, Input, State, F[_] : Concurrent : Monad](
+    receive: (Input, Ref[F, State]) => F[Output],
+    state: Ref[F, State],
+    queue: Queue[F, (Input, Deferred[F, Output])]
+  ): F[Fiber[F, Unit]] =
+    (for {
+      (input, response) <- queue.dequeue1
+      output <- receive(input, state)
+      _ <- response.complete(output)
+    } yield ()).foreverM.void.start
+\end{lstlisting}
+
+\begin{lstlisting}[
+float=h,
+captionpos=b,
+label=lst:statelessactorreceiver,
+caption={The receiving function for a stateless actor}
+]
+  private def statelessReceiver[Output, Input, F[_] : Concurrent : Monad](
+    receive: (Input) => F[Output],
+    queue: Queue[F, (Input, Deferred[F, Output])]
+  ): F[Fiber[F, Unit]] =
+    (for {
+      (input, response) <- queue.dequeue1
+      output <- receive(input)
+      _ <- response.complete(output)
+    } yield ()).foreverM.void.start
+\end{lstlisting}
 
 \end{document}

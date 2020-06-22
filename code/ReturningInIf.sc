@@ -4,8 +4,3 @@ def abs(x: Int): Int = {
   else
     return x
 }
-\lstinputlisting[
-  caption=An example of an impure function,
-  captionpos=b,
-  label={lst:addconsole}
-]{Readline.sc}

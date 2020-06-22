@@ -1,6 +1,8 @@
-var name = "Santi"
+import scala.util.chaining._
 
-def greet() = s"Greeetings $name !"
+var name = "Foo"
+
+def greet() = s"Greeetings $name!"
 def greetReversed(): Unit = {
   name = name.reverse
 }
@@ -10,8 +12,6 @@ def greetOther(whom: String): Unit = {
 }
 
 greetReversed()
-greetOther("Pepe")
+greetOther("Bar")
 
-println(
-  greet()
-)
+greet() pipe println // Greeetings Bar!

@@ -12,13 +12,10 @@ which programs are structured as a composition of pure functions
 \autocite{Hughes1989WhyMatters}.
 
 Pure functions, in contrast to function constructs of programming languages,
-% https://english.stackexchange.com/questions/7642/what-is-the-difference-between-by-contrast-and-in-contrast
 refer to the mathematical concept of a function. In mathematics, ``a function \textit{f}
 from A to B, where A and B are non-empty sets, is a rule that associates with
 each element of A (the domain) a unique element of B (the codomain)''
 \autocite{NicholsonTheMathematics}.
-% cambia todos los entrecomillados que tengas tal como he hecho arriba
-% https://tex.stackexchange.com/questions/531/what-is-the-best-way-to-use-quotation-mark-glyphs
 
 \begin{figure}[ht]
   \centering \includegraphics[width=0.5\textwidth]{Function}
@@ -39,6 +36,7 @@ and returns this read integer added to the parameter n.
 \lstinputlisting[
   caption=An example of an impure function,
   captionpos=b,
+  float=h,
   label={lst:addconsole}
 ]{Readline.sc}
 
@@ -68,15 +66,6 @@ Some side effects that can make a function non-pure are
   \item Modifying a data structure in place
   \item Throwing an exception
 \end{itemize}
-
-% Te puede resultar interesante este artículo de Erik Meijer en el que
-% argumenta que la programación funcional pura debe ser totalmente pura
-% y que no cabe término medio:
-% https://queue.acm.org/detail.cfm?id=2611829
-%
-% Erik ha denominado a este estilo de programación "Fundamentalist Functional Programming"
-% https://www.youtube.com/watch?v=UuamC0T3hv8
-
 
 \subsection{Referential transparency} When treating with pure functions there is
 a one to one relation between a function call and the result it produces. For
@@ -110,8 +99,8 @@ posible to know a priori which is the related element to the input.
 
 \begin{figure}[ht]
   \centering \includegraphics[width=0.5\textwidth]{ImpureFunction}
-  \caption{\label{fig:impurefunction} A representation of the relationship introduced
-    by the readLine procedure}
+  \caption{\label{fig:impurefunction} A representation of the relationship
+    introduced by the readLine procedure}
 \end{figure}
 
 Figure \ref{fig:impurefunction} represents this indeterminism with the
@@ -133,6 +122,7 @@ depends on a global variable \texttt{name}, and returns a greeting to that name.
 \lstinputlisting[
   caption=A function which greets \texttt{name},
   captionpos=b,
+  float=h,
   label={lst:greeting}
 ]{Greet.sc}
 
@@ -140,13 +130,14 @@ To understand the behaviour of the function, it is needed to know the context in
 which it is called, i.e. inspect where the variable \texttt{name} is assigned
 and also when assignments to the variable occur previous to the function call.
 
-In the script shown in Listing \ref{lst:greetctx1}, it is possible to analyse
-that the output will be \texttt{Greeetings itnaS !} as the name is assigned
-to Santi first and then is reversed.
+In the script shown in Listing \ref{lst:greetctx1}, the output shown to console
+will be \texttt{Greeetings ooF!} as the name is assigned to \textit{Foo} first
+and then is reversed.
 
 \lstinputlisting[
   caption=An execution of greet which first reverses \texttt{name},
   captionpos=b,
+  float=h,
   label={lst:greetctx1}
 ]{GreetCtx1.sc}
 
@@ -162,6 +153,7 @@ been completely overriden.
 \lstinputlisting[
   caption=An execution of greet which changes the \texttt{name} after reversing it,
   captionpos=b,
+  float=h,
   label={lst:greetctx2}
 ]{GreetCtx2.sc}
 
@@ -237,6 +229,7 @@ functions.
 \lstinputlisting[
   caption=An example of how functional programming is about function composition,
   captionpos=b,
+  float=h,
   label={lst:functionalgreeting}
 ]{FunctionalGreeter.sc}
 
@@ -249,6 +242,7 @@ function composition and the other is by defined through intermediate variables.
 \lstinputlisting[
   caption=An example of how functional programming is about function composition,
   captionpos=b,
+  float=h,
   label={lst:variablefunctionalgreeting}
 ]{VariableFunctionalGreeter.sc}
 
@@ -300,10 +294,14 @@ a Java class \texttt{FunctionalIf} which showcases in the function
 
 % Santiago, no entiendo bien el párrafo anterior. En Scala también puedes hacer un return y salir
 % abruptamente de una función
+% RESP: En concreto lo hice porque en Scala aunque se puede salir de forma
+% abrupta realmente sigue siendo el mismo bloque if que realmente es
+% declarativo. Prefería cambiar de lenguaje para mostrarlo de una forma mas real.
 
 \lstinputlisting[
 caption=An example of imperative if else which does not break referential transparency,
 captionpos=b,
+float=h,
 label={lst:functionalifelse}
 ]{Java/src/FunctionalIf.java}
 
@@ -318,9 +316,7 @@ condition is not satisfied, the returned value is the only value in the \texttt{
 
 Another expression that Scala provides is the for expression. A for expression
 traverses a data structure in order to produce a new one by filtering and
-transforming their elements. At a later moment in this document, [[Complete
-with chapter when ready]] for expressions will be revisited and explained in
-greater detail.
+transforming their elements.
 
 Along with if and for expressions, a way to iterate and construct
 functional programs is by using recursion. Recursion is an useful tool in order
@@ -330,23 +326,26 @@ extra frame in the execution stack to save the context in which the recursive ca
 made.
 
 There is a way to overcome this, as functions in which the last expression
-calculated is the recursive call, called tail-recursive funtions, can be efficiently
-implemented by an optimisation of the compiler which can substitute the
-recursive call for a \texttt{goto} statement without the expenses of new stack
-frame allocations \autocite{Steele1977DebunkingGoto} \footnote{In Scala, in order
-to tell the compiler to produce a compile time error if this optimization cannot be done, the
-\texttt{@tailrec} annotation can be
+calculated is the recursive call, called tail-recursive funtions, can be
+efficiently implemented by an optimisation of the compiler which can substitute
+the recursive call for a \texttt{goto} statement without the expenses of new
+stack frame allocations \autocite{Steele1977DebunkingGoto} \footnote{In Scala,
+in order to tell the compiler to produce a compile time error if this
+optimization cannot be done, the \texttt{@tailrec} annotation can be
 used\autocite{ScalaScala.annotation.tailrec}}.
 
-An example of a tail recursive function can be a one which calculates the sum of a list of integers. To
-make use of tail recursion, a auxiliar function is provided. It accepts, along with the list whose elememnts are yet to
-be added, an integer parameter (the accumulator), which accumulates the sum of all elements already added. As the addition
-of integers is a monoid with 0 as its identity, the initial call must be made with 0 as accumulator, as shown in
+An example of a tail recursive function can be a one which calculates the sum of
+a list of integers. To make use of tail recursion, a auxiliar function is
+provided. It accepts, along with the list whose elememnts are yet to be added,
+an integer parameter (the accumulator), which accumulates the sum of all
+elements already added. As the addition of integers is a monoid with 0 as its
+identity, the initial call must be made with 0 as accumulator, as shown in
 Listing \ref{lst:listsum}.
 
 \lstinputlisting[
 caption=A tail recursive function for summing a list of Integers,
 captionpos=b,
+float=h,
 label={lst:listsum}
 ]{ListSum.sc}
 
@@ -357,14 +356,16 @@ like \texttt{String}s or \texttt{Int}s do. This way they are treated as another
 regular type by the compiler, having the capacity of being passed around as any
 other value.
 
-As an example of use, a string trimming function is shown in listing \ref{lst:stringtrimmer}. This
-function will iterate, character by character, the string and will remove a
-character if a specific condition is not met. The predicate used to indentify remaining characters is
-decided by the caller. This predicate is a function \texttt{pred: Char => Boolean}.
+As an example of use, a string trimming function is shown in listing
+\ref{lst:stringtrimmer}. This function will iterate, character by character, the
+string and will remove a character if a specific condition is not met. The
+predicate used to indentify remaining characters is decided by the caller. This
+predicate is a function \texttt{pred: Char => Boolean}.
 
 \lstinputlisting[
 caption=Trimming a string based on a predicate,
 captionpos=b,
+float=h,
 label={lst:stringtrimmer}
 ]{StringTrimmer.sc}
 
@@ -373,17 +374,18 @@ label={lst:stringtrimmer}
 
 One way in which functional programs can express polymorphism by the use of
 generic types in function declarations. This mechanism, available nowadays in
-many programming languages, allow functions to take parameters
-with an abstract type which will be resolved when the function is called. In Scala, to use a generic type in a
-function, the generic type
-must be defined between square brackets after the function name. This way, the
-function can be defined one time but be used with different types. The function
-filter defined previously for Listing \ref{lst:stringtrimmer} can be generalized
-for a generic list \texttt{List[A]} as shown in \ref{lst:listfilter}
+many programming languages, allow functions to take parameters with an abstract
+type which will be resolved when the function is called. In Scala, to use a
+generic type in a function, the generic type must be defined between square
+brackets after the function name. This way, the function can be defined one time
+but be used with different types. The function filter defined previously for
+Listing \ref{lst:stringtrimmer} can be generalized for a generic list
+\texttt{List[A]} as shown in \ref{lst:listfilter}
 
 \lstinputlisting[
 caption=Filtering the elements of a generic List,
 captionpos=b,
+float=h,
 label={lst:listfilter}
 ]{Filter.sc}
 
@@ -416,6 +418,7 @@ program will fail to compile improving its overall resilience.
 \lstinputlisting[
 caption=Different instances of the \texttt{Show} typeclass,
 captionpos=b,
+float=h,
 label={lst:showtypeclass}
 ]{Show.sc}
 
@@ -432,7 +435,13 @@ with the use of Implicit Classes. This mechanism allows to wrap an existing
 class and add methods which use the instances of the given type class as if they
 had the originally defined type. Listing \ref{lst:typeclasssyntax}
 shows how they can be used for our instances.
-% parece que falta el listado typeclasssyntax.sc
+
+\lstinputlisting[
+caption=Adding syntax to the \texttt{Show} typeclass,
+captionpos=b,
+float=h,
+label={lst:typeclasssyntax}
+]{ShowSyntax.sc}
 
 
 \subsection{Functional data structures} At the beginning of the section, among

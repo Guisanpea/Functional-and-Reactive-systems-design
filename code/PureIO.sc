@@ -10,7 +10,7 @@ val ioByVariable = {
     b <- x
     _ <- IO(println((a, b)))
   } yield (a, b)
-}.unsafeRunAsync(_ => ())// (-1155484576,-723955400)
+}.unsafeRunAsyncAndForget() // (-1155484576,-723955400)
 
 val ioByComposition = {
   val random = new Random(0L)
@@ -19,4 +19,4 @@ val ioByComposition = {
     b <- IO(random.nextInt)
     _ <- IO(println((a, b)))
   } yield (a, b)
-}.unsafeRunAsync(_ => ())// (-1155484576,-723955400)
+}.unsafeRunAsyncAndForget() // (-1155484576,-723955400)

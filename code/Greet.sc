@@ -1,3 +1,3 @@
-var name = "Santi"
+var name = "Foo"
 
-def greet() = s"Greeetings $name !"
+def greet() = s"Greeetings $name!"
