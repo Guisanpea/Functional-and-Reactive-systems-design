@@ -7,7 +7,7 @@
 
 \begin{document}
 
-\subsection{Improving Resilience with Computational effects}
+\subsection{Abstracting over Computational Effects}
 In 1991 Eugenio Moggi \autocite{MoggiNotionsMonads} described a model
 in category theory for separating the set of values a object of type \texttt{A} may have from
 the notion of computing those values, \texttt{T A}, which denotes an effect on top of
@@ -125,7 +125,7 @@ interpreted this state is read through external ports, i.e.
 network card; peripherals; storage disk, \ldots while at the same time is also  able
 to produce an state change on this external elements
 
-\subsubsection{The resilience of computational effects}
+\subsubsection{The resilience of Computational Effects}
 In statically typed programming languages, computational effects offer a greater resilience as the
 programmer has to explicitly deal with the effect and can not ignore the
 effectful nature of it, like having a possible error, an Either effect, or being a possibly
@@ -161,9 +161,6 @@ contributes to the overall application reactiveness by terms of responsivenes by
 improving the overall request latency and by reducing the load of the main
 execution thread.
 
-% hay cierta incoherencia en el uso de mayúsculas/minúsculas en títulos de secciones, párrafos, etc. Aquí,
-% futures estaba en minúscula pero en 4.4 está en mayúsculas. Deberías de repasar todos los títulos y hacerlo
-% un uso coherente. Puedes repasarlo rápidamente en la tabla de contenidos inicial.
 \paragraph{Latency improvements of Futures}
 
 By spawning blocking calls in a separate thread of execution, the response time of
@@ -182,10 +179,10 @@ figure \ref{fig:futurelatency}.
 
 \subsubsection{Futures are highly composable}
 Futures are designed to be composable. Instead of transforming the result of the
-future by waiting for the evaluation of the inner expression to be completed,
+Future by waiting for the evaluation of the inner expression to be completed,
 some methods of a \texttt{Future[A]} allow to transform it by passing a description of what
 should be done once the Future is completed. These methods don't block execution until the
-future is completed but return inmediatly a \texttt{Future[B]}, being \texttt{B} the type of
+Future is completed but return inmediatly a \texttt{Future[B]}, being \texttt{B} the type of
 the value obtained by tranforming \texttt{A}.
 
 \paragraph{Freeing the load of the main thread of execution}
@@ -193,13 +190,12 @@ the value obtained by tranforming \texttt{A}.
 In web servers there is usually a fixed thread pool for handling requests. This
 thread pool has a maximum number of threads available to prevent the system
 from collapsing. In Tomcat,
-% pon una referencia a documentacion de Tomcat que trate esto
 for example, when this threshold is surpassed, no more
-requests can be met and requests start to be stacked. As a consequence, latency
+requests can be met and requests start to be stacked \autocite{TheApacheSoftwareFoundation2020ApacheConnector}. As a consequence, latency
 starts to increase in a great manner.
 
 Futures have an implicit parameter which defines the execution context in which
-the future expression will be ran \autocite{ScalaScala.concurrent.ExecutionContext}. An
+the Future expression will be ran \autocite{ScalaScala.concurrent.ExecutionContext}. An
 execution context may have associated an specific thread pool. This can be used
 for making the blocking calls to be executed in a separate pool for blocking
 tasks, freeing the main thread thread pool which is only responsible of spawning the tasks
@@ -212,13 +208,6 @@ By the definition of it, if Futures were referentially transparent the result of
 Future should be the same regardless of the operations being composed
 directly or saved in variables.
 
-
-The project Cats Effect \autocite{CatsHome} provides a standard \texttt{IO} type for
-Scala. This \texttt{IO} type provides both synchronous and asynchronous evaluation
-models. IO provides a referent
-
-% la frase anterior está cortada
-
 \lstinputlisting[
 caption=An example of how a Future is not referentially transparent.,
 float=h,
@@ -227,8 +216,8 @@ label={lst:impurefuture}
 ]{ImpureFuture.sc}
 
 This lack of referential transparency is shown in Listing \ref{lst:impurefuture}. Two
-future variables are created on the top level \texttt{futureByVariable} and
-\texttt{futureByComposition}. This futures are created by composing two futures
+Future variables are created on the top level \texttt{futureByVariable} and
+\texttt{futureByComposition}. This Futures are created by composing two Futures
 created by the same operation, \texttt{random.nextInt}. However, in
 \texttt{futureByVariable} as \texttt{Future} caches the results of the function
 which was ran on it, the operation isn't performed the second time. This caching
@@ -237,6 +226,11 @@ be updated once the operation has been performed.
 
 The IO Monad does not perform this caching and it is possible to save a value of type IO into a
 variable without losing referential transparency as Listing \ref{lst:pureio} shows.
+
+The project Cats Effect \autocite{CatsHome} provides a standard \texttt{IO} type for
+Scala. This \texttt{IO} type provides both synchronous and asynchronous evaluation
+models. this IO datatype provides an asynchronous processing model similar to
+Future but referentially transparent.
 
 \lstinputlisting[
 caption=The IO Monad does not cache values and is referentially transparent.,
