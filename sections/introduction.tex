@@ -3,16 +3,102 @@
 \begin{document}
 
 \subsection{Motivation}
+Software systems nowadays are having an unprecedented amount of changing
+requirements. As more people have gained access to personal computers, and more
+lately mobile devices the amount of users an application could have have
+increased greatly. In the past software was developed using a waterfall model,
+target users were localized and systems were made to satisfy their needs with
+their requirements were known a priori.
 
-%% Reactive systems
-As technology has been evolving, the non functional requirements of software systems have been growing to be more demanding. Nowadays, a typical cloud service is being used.
-    
-\begin{figure}[ht]
-    \centering
-        \includegraphics[width=0.5\textwidth]{xp}
-    \caption{A diagram showing the iterations of extreme programming.}
-\end{figure}
-    
-\blindtext
+This scenario is no longer true. Today's users expect software that adapt to their
+needs and in many cases have plenty of alternatives to choose. If an application
+is not able to accommodate to the user demands they can browse or
+download another one in matter of seconds to minutes at the same time.
+
+With that premise in mind is now more than ever construct applications that are
+evolutionary, able to adapt and easily maintainable. This is exactly what
+Functional Programming aims to achieve. Functional programs are composed of
+functions that are highly composable and that require low maintenance. This
+functions are guaranteed to maintain their behavior regardless of external
+changes. And as they are free of side effects they provide a seamless
+reutilization experience given that they produce no observable result other than
+producing the expected use being safe to use regardless of the context in which
+they are called.
+
+With that characteristics refactoring is safe because one change of a function
+cannot produce a side effect that could affect the functions which are not using
+it.
+
+As users demand new features more frequently expecting, no degrading of already
+existing behaviour changes are expected to happen occur on code often and having such
+properties of functional programs is very desirable in this context.
+
+At the same time, the non functional requirements of software systems have been
+growing to be more strict. Nowadays not only human beings consume applications,
+the so called Internet of things has been growing massively starting to be
+ubiquitously present, from home automation to agriculture there are devices
+which connect to the internet to do their work. This can make services to be
+consumed by millions of clients simultaneously.
+
+When developing web applications they must be able to scale to this
+circumstances and work under high loads without affecting the user experience
+and the application responsiveness. The Reactive System term have been then coined to
+describe a series of traits and elements that form software applications which
+accomplish this characteristics.
+
+\subsection{Objectives}
+Firstly, in this document it is going to be exposed what is functional
+programming, the characteristics of functional programs and the benefits that
+they provide to software systems. At the same times it is going to be showcased
+in a practical basis how to create functional programs in the Scala programming
+languages and why it is a suitable language for making functional programs.
+
+Secondly it will introduce what are reactive systems, as a principled way to
+structure applications that are able to scale and be responsive for users and how to
+create them in the context of Functional Programming, combining the benefits of
+systems that are able to change and have a good performance
+
+The end goal will be to create a basic set of principles for functional
+programming which will allow the programmer not only to recognize what makes
+programs functional but to get the most benefit from them. At the same time common
+patterns and elements of functional programs will be shown to help to earn the
+greatest profit in this paradigm.
+
+Finally a web application made with purely functional constructs will be
+developed. This will showcase how Functional Programming can be used to create
+applications that interact with the real world and that at the same time have
+the reactive traits, thus being both easily adaptable to change and good performant.
+
+\subsection{Structure of the document}
+The structure of the document is aligned with the objectives. Chapter 2
+will introduce the Functional Programming paradigm along with the principles and
+benefits of it.
+
+Chapter 3 will explain then the concept of Reactive Systems, how they relate to
+well performing applications and what makes a system reactive.
+
+Both chapters will thus serve as a study of the state of the art and understand the
+pillars of both topics to be able to base the rest of the document on this fundamentals.
+
+In Chapter 4 after these fundamentals are known is going to show elements common to
+both reactive and functional programs. In it some common structures in
+Functional Programming will be presented, at the same time and context there are
+also going to be elements of programs that enable reactiveness on an application.
+
+With the knowledge acquired from previous chapters, Chapter 5 is exploring the
+companion application to this document, exploring a web application based on
+both functional and reactive traits. It will introduce a way of interacting with
+the external world in a functional manner and how an application can be
+structured based on purely functional constructs.
+
+\subsection{Technologies used}
+The whole text will use the Scala programming language for explaining concepts
+and to present examples. Ammonite \autocite{Ammonite} will be used as a tool for
+creating small Scala scripts as it allows importing third party dependencies and
+other scripts in a simple way.
+
+Then the application which will put in practice the concepts exposed previously
+will be based on various libraries of the Typelevel ecosystem
+\autocite{2020Typelevel.scala} which are based on the Cats library \autocite{Cats:Home}.
 
 \end{document}

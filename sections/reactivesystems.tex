@@ -3,10 +3,8 @@
 \begin{document}
 \subsection{The reactive manifesto}
 
-As mentioned in the introduction, all 
-systems nowadays have to handle big amounts of data, coming from thousands of
-concurrent users, which are demanding low latency responses in the order of
-% by terms of -- No he encontrado esta expresión
+As mentioned in the introduction, software systems nowadays have to handle big amounts of data,
+coming from thousands of concurrent users, which are demanding low latency responses in the order of
 milliseconds and robust systems with a 100\% of up time.
 
 
@@ -18,18 +16,12 @@ failure and when failure does occur they meet it with elegance rather than
 disaster. Reactive Systems are highly responsive, giving users effective
 interactive feedback.''
 
-%% Consider talking about https://www.lightbend.com/blog/why-do-we-need-a-reactive-manifesto
-
-At the same time it describes what the traits of reactive systems are. 
-% para este párrafo, no acabo de entender su redacción
-% desde aquí
-This
-traits can be categorised hierarchically by the end goal they serve. Being
-responsiveness the trait which directly provides value to systems and the other
-three characteristics that reactive systems need to meet in order to be
-responsive. 
-% hasta aquí
-This relationship can be visualised in the Figure
+At the same time it describes whhich are the traits of reactive systems. These
+traits can be categorised hierarchically by organizing them towards the end goal they serve. Being
+responsive is the trait which directly provides the user value to systems, as systems that are responsive
+are more appealing for users. Resiliency and elasticity are the characteristics that
+have to be present in order to be responsive, and lastly, being message driven is the way
+through which systems can easily accomplish resiliency and elasticity. This relationship can be visualised in Figure
 \ref{fig:reactive}.
 
 \begin{figure}[ht] \centering
@@ -54,8 +46,9 @@ interesting the following ones:
 
 \begin{itemize}
     \item A 100-millisecond delay in website load time can hurt conversion rates
-by 7 percent.
-% a qué te refieres con "conversion rates"?
+by 7 percent\footnote{In the marketing context, conversion rates are the amount of users
+    which when visiting a web page complete their desired goal, for example, buying an item
+    when visiting an online commerce.}.
 
     \item A two-second delay in web page load time increases bounce rates by 103
 percent.
@@ -140,11 +133,11 @@ message is not known. A load balancer can choose which system will be the recipi
 of the message, allowing for \textbf{Elasticity}.
 
 As messages are asynchronous, the sender of the message does not need to wait for
-a response from the receive, and can handle other workloads or even
+a response from the receiver, and can handle other workloads or even
 terminate as is no longer responsible for the message.
 
 This decoupling provides greater \textbf{resilience} because the asynchronous
-boundary isolate errors from being propagated. Indeed, errors can be propagated
+boundary isolates errors from being propagated. Indeed, errors can be propagated
 as messages, having specific error handler modules which can act in consequence
 to avoid the collapse of the system and allow a gracefully recover from failure.
 \end{document}

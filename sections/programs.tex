@@ -10,7 +10,7 @@ perform their actions, which would break referential transparency.
 
 One first approach to deal with this problem would be to decide having ``mostly
 functional'' programs. The problem is that this not completely functional
-programming model does not work \autocite{MeijerTheWork}. Thinking that
+programming model does not work\autocite{MeijerTheWork}. Thinking that
 this mixture would give the benefits of functional programs is a
 fallacy. Referential transparency is given or not, there is no middle ground. If
 some of the elements which compose a program are not referentially transparent,
@@ -21,7 +21,7 @@ functional ones. In the case of the study presented in this section, the Cats li
 \autocite{Cats:Home} will be the foundation for building functional programs.
 
 Its documentation describes it as ``a library which provides abstractions for
-functional programming in the Scala programming language. ... A broader goal of
+functional programming in the Scala programming language. \ldots A broader goal of
 Cats is to provide a foundation for an ecosystem of pure, typeful libraries to
 support functional programming in Scala applications''.
 
@@ -32,8 +32,7 @@ there are also utility type classes, like the Show typeclass which was shown in
 Section 2.
 
 However, Cats doesn't provide any utility for interacting with the real world in
-a functional way. There is a separate project, Cats-effect, 
-% pon referencia a Cats-effect
+a functional way. There is a separate project, Cats-effect, \ref{CatsHome}
 which ``aims to
 provide a standard IO type for the Cats ecosystem, as well as a set
 of typeclasses (and associated laws) which characterize general effect types.''.
@@ -46,6 +45,29 @@ element which made referential transparency lost, and thus it should be the last
 operation done in the application. Cats Effect provides \texttt{IOApp} which is
 a safe wrapper of a Scala app which expects an \texttt{IO} and runs it, hence ensuring
 that programs can remain purely functional without exposing any kind of impurity.
+
+\subsection{The case of study}
+For putting into practice the concepts we are studying, a simple web application will be
+developed. It will serve as a basis for an application to organize tennis
+matches.
+
+Two REST resources will be exposed: players and matches. A player will be
+represented with an UUID and a match will involve two players and an optional
+player (the winner).
+
+The methods on these resources will be:
+\begin{enumerate}
+\item \texttt{GET /\{resource\}}, which will obtain all the resources saved.
+\item \texttt{POST /\{resource\}}, which will create a new resource on the
+  database.
+\item \texttt{GET /\{resource\}/\{id\},} which will return the resource with the
+  given id or a 404 error.
+\item \texttt{DELETE /\{resource\}/\{id\}}, which will delete a resource with the
+  given id.
+\end{enumerate}
+
+The resources will be \texttt{players} and \texttt{matches} and they will be
+persistent in a PostgreSQL relational database,
 
 \subsection{Representing lazy sequences with Streams}
 One of the main concerns of the \texttt{IO} datatype is to separate computation
@@ -89,8 +111,8 @@ When implementing functional programs, Streams will be a good representation whe
 potentially unbounded, non strict and sequential sources of data.
 
 \subsection{Serving a Web Server}
-On top of Cats-effect, http4s provides a typeful, functional and streamed model
-for creating http servers.
+On top of Cats-effect, Http4s provides a typeful, functional and streamed model
+for creating HTTP servers.
 
 Http4s routes are modeled as \mbox{\texttt{Kleisli[OptionT[F,
 *], Request, Response]}}, or simplifying the Kleisli Category, \mbox{\lstinline{Request => F[Option[Response]]}},
@@ -101,13 +123,13 @@ response may imply performing a side effect, such as reading from the database o
 accessing a resource from the network, and the response has to be optional
 because the given route may not have an appropiate handler.
 
-\texttt{Request} and \texttt{Response} datatype encode the Http requests and
+\texttt{Request} and \texttt{Response} datatype encode the HTTP requests and
 responses. One interesting element of them is that the body of this request is
 represented with the type \texttt{EntityBody[+F[\_]]}. And when looking at its
 type definition, the entity body is defined as
-\lstinline{type EntityBody[+F[\_]] = Stream[F, Byte]}.
-When defining http4s, it was mentioned that it provided a streamed model for
-http. This streaming model is very important for reactive applications. If a
+\lstinline{type EntityBody[+F[_]] = Stream[F, Byte]}.
+When defining Http4s, it was mentioned that it provided a streamed model for
+HTTP This streaming model is very important for reactive applications. If a
 request was not streamed, the response time of the web
 server would be
 
@@ -121,12 +143,11 @@ entirety before being able to work on it. If the request is streamed, both
 the processing of the request and the operations on them can be interleaved,
 reducing the overall latency of the request. This can also be applied for the
 response, as the response body is also modeled as an \texttt{EntityBody}. By
-providing a streamed model of Http, the applications reactivity is increased by
+providing a streamed model of HTTP, the applications reactivity is increased by
 terms of responsiveness.
 % de nuevo, a veces http (en minúscula) y otras Http. Hazlo consistente
 
-
-To create handlers for Http requests, http4s provides the \texttt{HttpRoutes.of[F]} method, which accepts a partial
+To create handlers for HTTP requests, Http4s provides the \texttt{HttpRoutes.of[F]} method, which accepts a partial
 function \texttt{Request => F[Response[F]]} and lifts it into \texttt{OptionT} type,
 being it None in case that the partial function is not defined or Some in case
 it is. For example, the routes for the \texttt{/players} resource of the
@@ -167,8 +188,7 @@ instance in place, an application router can be composed from other routes as Li
 \end{lstlisting}
 
 \subsection{Accessing a database}
-For working with persistent data within an IO, Doobie, A functional JDBC layer for Scala,
-% pon cita a Doobie
+For working with persistent data within an IO, Doobie \autocite{Norris2020Doobie}, A functional JDBC layer for Scala,
 provides a monadic API for describing
 queries and commands on a database. Operations in Doobie return descriptions of
 computations within a context. For example the \texttt{ConnectionIO[A]} type
@@ -217,7 +237,7 @@ when evolutions occur.
 
 If queries on the database are done with plain SQL, as changes to the underlying
 representation are made, this queries must be rewritten. For this reason Quill
-% mete referencia  Quill
+\autocite{Quill}
 provides a Scala case class to Database schema mapping. These queries are
 resolved to an internal abstract syntax tree for Quill and translated to a
 database query at compile time, having a low runtime overhead. This queries can
@@ -259,9 +279,9 @@ caption={A Quill query returning all the elements of a match.}
 \end{lstlisting}
 
 \subsubsection{Streaming database records}
-As presented on the http section, when streaming information, the application
+As presented on the HTTP section, when streaming information, the application
 response times are improved. For this reason Doobie provides a way to return
-database elements in a streamed manner. This combined with http streaming allows
+database elements in a streamed manner. This combined with HTTP streaming allows
 to improve the overall latency in a great manner.
 
 To return streamed content with Quill, it is only needed to apply the
@@ -283,8 +303,7 @@ accomplish the three traits that reactive systems have to meet to be responsive.
 Actors, by definition, communicate by means of messages. Actors don't share state nor do they share
 code. They consist of an internal state and only communicate through messages.
 
-Actors implementations such as Erlang processes and Akka Actors
-% mete cita a Akka
+Actors implementations such as Erlang processes \ref{EricssonAB2018ErlangProcesses} and Akka Actors \autocite{LightbendInc.2020AkkaActors}
 are also resilient.
 Supervision Trees is the way of having fault tolerant systems within this
 concurrency model. In a Supervision Tree there are actors whose responsability

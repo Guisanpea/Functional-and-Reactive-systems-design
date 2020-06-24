@@ -7,7 +7,7 @@
 
 \begin{document}
 
-\subsection{Improving Resilience with Computational effects}
+\subsection{Abstracting over Computational Effects}
 In 1991 Eugenio Moggi \autocite{MoggiNotionsMonads} described a model
 in category theory for separating the set of values a object of type \texttt{A} may have from
 the notion of computing those values, \texttt{T A}, which denotes an effect on top of
@@ -51,7 +51,7 @@ Some monad instances can be defined for representing different effects.
 
 \paragraph{Option Monad}
 The Option Monad is an effect which may represent a value of a type \texttt{A} or
-not. An \texttt{Option[A]} has two possible values. \texttt{Some(x)}, which means
+not. An \texttt{Option[A]} has two possible values. \texttt{Some(a)}, which means
 that the value is present, or \texttt{None}, meaning that there is no value.
 
 The function flatMap in this case returns a transformed \texttt{Some} if the monad in which
@@ -80,15 +80,13 @@ label={lst:eithermonad}
 ]{EitherMonad.sc}
 
 \paragraph{State Monad}
-The State Monad is an effect which, given a state of type \texttt{S}, performs an state
+The State Monad is an effect which, given a state of type \texttt{S}, performs a state
 transition resulting in a value of type \texttt{A}, modeling an state machine.
 As state cannot be mutated in place, the state transition returns both the new
-state and the resulting value. 
+state and the resulting value.
 
 When using the state monad, flatMap directly returns a monad with the new state,
 avoiding the need to explicitly pass the state all along the way, as shown in Listing \ref{lst:statemonad}.
-
-% Qué es el * en este listado? Parace un type lambda pero desconozco esa sintaxis en Scala
 
 \lstinputlisting[
 caption=The state monad instance.,
@@ -119,13 +117,16 @@ can keep functional at its core and the benefits of purity are not lost until
 the interpretation of the side effects, which is usually done as the last step of
 the computation. Usually, in order to avoid running the execution of the side
 effects manually, the entry function of the application expects an IO to be
-returned which will be then interpreted. This is exactly what the main function of a Haskell program does \autocite{AIO}
+returned which will be then be interpreted. This is exactly what the main method
+of Haskell does \autocite{AIO}.
 
- 
-% Hay otra interpretación de la mónada IO. Supongamos un estado que representa TODO el estado (sistema de ficheros, consola, teclado, conexiones de red, etc.) de la máquina ejecutando el programa.
-% La mónada IO es solo un transformador de estados sobre dicho estado. Es decir, cada operación con efectos laterales, parte del estado antes de la ejecución de la operación y, a partir de éste, calcula un resultado y un nuevo estado, que será el estado de entrada para la siguiente operación. La misma operación, ante distintos estados de entrada, podría así devolver distintos valores.
+Alternatively, the IO datatype can be thought of as an state transformer over 
+the state not belonging to the program itself but to the external world. When
+interpreted, this state is read through external ports, i.e.
+network card, peripherals, storage disk, \ldots and, at the same time, the new produced 
+state can be ``written" to these external elements.
 
-\subsubsection{The resilience of computational effects}
+\subsubsection{The resilience of Computational Effects}
 In statically typed programming languages, computational effects offer a greater resilience as the
 programmer has to explicitly deal with the effect and can not ignore the
 effectful nature of it, like having a possible error, an Either effect, or being a possibly
@@ -133,7 +134,7 @@ future value, i. e. an IO effect.
 
 This implicit treatment of effects, just like the use of a \texttt{Null} pointer, has
 lead to great a number of mistakes, being called by Tony Hoare, one of the first designers of
-programming languages, his billion dolar mistake.
+programming languages, his billion dolar mistake \autocite{NullMistake}.
 
 Nullability is not the only case of implicit effect in programming. The use of unchecked
 exceptions in object oriented programming languages can let errors get propagated
@@ -161,12 +162,9 @@ contributes to the overall application reactiveness by terms of responsivenes by
 improving the overall request latency and by reducing the load of the main
 execution thread.
 
-% hay cierta incoherencia en el uso de mayúsculas/minúsculas en títulos de secciones, párrafos, etc. Aquí,
-% futures estaba en minúscula pero en 4.4 está en mayúsculas. Deberías de repasar todos los títulos y hacerlo
-% un uso coherente. Puedes repasarlo rápidamente en la tabla de contenidos inicial.
 \paragraph{Latency improvements of Futures}
 
-By spawning blocking calls in separate thread of execution, the response time of
+By spawning blocking calls in a separate thread of execution, the response time of
 a request transitions from being the sum of the latencies of the independent
 blocking operations to the latency of the longest one. This is represented in
 figure \ref{fig:futurelatency}.
@@ -182,24 +180,23 @@ figure \ref{fig:futurelatency}.
 
 \subsubsection{Futures are highly composable}
 Futures are designed to be composable. Instead of transforming the result of the
-future by waiting for the evaluation of the inner expression to be completed,
+Future by waiting for the evaluation of the inner expression to be completed,
 some methods of a \texttt{Future[A]} allow to transform it by passing a description of what
 should be done once the Future is completed. These methods don't block execution until the
-future is completed but return inmediatly a \texttt{Future[B]}, being \texttt{B} the type of 
+Future is completed but return inmediatly a \texttt{Future[B]}, being \texttt{B} the type of
 the value obtained by tranforming \texttt{A}.
 
 \paragraph{Freeing the load of the main thread of execution}
 
 In web servers there is usually a fixed thread pool for handling requests. This
 thread pool has a maximum number of threads available to prevent the system
-from collapsing. In Tomcat, 
-% pon una referencia a documentacion de Tomcat que trate esto
+from collapsing. In Tomcat,
 for example, when this threshold is surpassed, no more
-requests can be met and requests start to be stacked. As a consequence, latency
+requests can be met and requests start to be stacked \autocite{TheApacheSoftwareFoundation2020ApacheConnector}. As a consequence, latency
 starts to increase in a great manner.
 
 Futures have an implicit parameter which defines the execution context in which
-the future expression will be ran \autocite{ScalaScala.concurrent.ExecutionContext}. An
+the Future expression will be ran \autocite{ScalaScala.concurrent.ExecutionContext}. An
 execution context may have associated an specific thread pool. This can be used
 for making the blocking calls to be executed in a separate pool for blocking
 tasks, freeing the main thread thread pool which is only responsible of spawning the tasks
@@ -212,13 +209,6 @@ By the definition of it, if Futures were referentially transparent the result of
 Future should be the same regardless of the operations being composed
 directly or saved in variables.
 
-
-The project Cats Effect \autocite{CatsHome} provides a standard \texttt{IO} type for
-Scala. This \texttt{IO} type provides both synchronous and asynchronous evaluation
-models. IO provides a referent
-
-% la frase anterior está cortada
-
 \lstinputlisting[
 caption=An example of how a Future is not referentially transparent.,
 float=h,
@@ -227,8 +217,8 @@ label={lst:impurefuture}
 ]{ImpureFuture.sc}
 
 This lack of referential transparency is shown in Listing \ref{lst:impurefuture}. Two
-future variables are created on the top level \texttt{futureByVariable} and
-\texttt{futureByComposition}. This futures are created by composing two futures
+Future variables are created on the top level \texttt{futureByVariable} and
+\texttt{futureByComposition}. This Futures are created by composing two Futures
 created by the same operation, \texttt{random.nextInt}. However, in
 \texttt{futureByVariable} as \texttt{Future} caches the results of the function
 which was ran on it, the operation isn't performed the second time. This caching
@@ -237,6 +227,11 @@ be updated once the operation has been performed.
 
 The IO Monad does not perform this caching and it is possible to save a value of type IO into a
 variable without losing referential transparency as Listing \ref{lst:pureio} shows.
+
+The project Cats Effect \autocite{CatsHome} provides a standard \texttt{IO} type for
+Scala. This \texttt{IO} type provides both synchronous and asynchronous evaluation
+models. In addtion, this IO datatype provides an asynchronous processing model similar to
+Future but referentially transparent.
 
 \lstinputlisting[
 caption=The IO Monad does not cache values and is referentially transparent.,
