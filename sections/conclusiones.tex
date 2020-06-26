@@ -3,90 +3,92 @@
 \begin{document}
 
 \subsection{Conclusioness}
-Tras estudiar los conceptos detrás de la Programación Funcional la principal
-conclusión es que provee un cambio de mentalidad a la hora de implementar programas
-respecto a los elementos sobre los que estos se construyen.
+Tras estudiar los conceptos que fundamentan la Programación Funcional, la principal
+conclusión es que ésta implica un cambio de mentalidad a la hora de implementar programas
+respecto a los elementos con los que éstos se construyen.
 
-Los elementos sobre los que se construyen los programas imperativos son procedimientos
+Los elementos con los que se construyen los programas imperativos son procedimientos
 que modifican el estado global del programa. Estos procedimientos no se centran exclusivamente
-en el valor que producen si no en el \textit{cómo} lo producen. Un procedimiento en programación
-imperativa no tiene por que devolver un resultado para realizar algo constructivo en la aplicación.
-Tan es así que en los lenguajes imperativos existe un tipo \textt{void} que puede declararse
-como devuelto por las funciones que no devuelven un valor en sí, sino que modifican el estado global
-como propósito.
+en el valor que producen sino, adenás, en el \textit{cómo} se producen. Un procedimiento en programación
+imperativa no tiene porque devolver un resultado para realizar algo constructivo en la aplicación.
+Esto es tan habitual que en los lenguajes imperativos existe un tipo, \textt{void}, que se utiliza
+para declarar el tipo devuelto por las ``funciones'' cuyo propóstito no es devolver un valor sino  
+modificar el estado global del sistema.
 
-Sin embargo en la programación funcional los bloques elementales son funciones. Estas
-funciones se pueden ver como representaciones opacas del valor que devuelven. Por eso
-mismo los elementos de programas funcionales se consideran declarativos más que imperativos.
-Porque se centran en \texit{qué} valores devuelven, y no en \texttt{cómo} los devuelven.
-Por eso mismo los programas funcionales se pueden considerar valores más que una serie de
-instrucciones que modifican un estado global.
+Sin embargo, en la programación funcional los bloques elementales son funciones. Estas
+funciones pueden ser vistas como representaciones opacas del valor que devuelven. Por eso
+mismo los programas funcionales se consideran declarativos más que imperativos ya que
+dichas funciones se centran en \texit{qué} valores deben devolver, y no en \texttt{cómo} 
+devolverlos. Así, los programas funcionales se pueden interpretar como valores más que como 
+una serie de instrucciones que modifican un estado global.
 
 Al final, los programas funcionales que interactúan con el mundo real son descripciones de
 las operaciones a realizar dentro del contexto de una Mónada IO \texttt{IO}. Esto se ha visto
-a la hora de crear los bloques que formarían la aplicación que acompaña al documento. Por ejemplo
-las funciones de Doobie devolvían un valor del tipo \texttt{ConnectionIO} que no eran más que
-descripciones de los valores que se devolverían una vez que se le proveyese un \texttt{java.sql.Connection}.
-Las rutas de Http4s eran una descripción de que hacer con una petición HTTP entrante, por lo que al
-final los programas funcionales son descripciones estáticas de unas operaciones a realizar pero
-no es hasta que el programa se interpreta que las operaciones finalmente se realizan.
+a la hora de crear los bloques que formarían la aplicación que acompaña a este documento. Por ejemplo,
+las funciones de Doobie devolvían un valores de tipo \texttt{ConnectionIO} que no eran más que
+descripciones de los valores que se devolverían una vez que se proporcione una \texttt{java.sql.Connection}.
+Las rutas de Http4s eran una descripción de qué hacer con una petición HTTP entrante por lo que, al
+final, los programas funcionales son descripciones estáticas de operaciones a realizar pero
+no es hasta que el programa se interpreta que dichas operaciones finalmente acaban realizándose.
 
-Este cambio de paradigma realiza la premisa que se proponía en la introducción. Como las
-funciones son meras descripciones del valor que devuelven en función de sus entradas, estas
-pueden ser reusadas sin afectar a las operaciones que ya existen en la aplicación. Esto permite
-que los cambios puedan ocurrir de manera más rápida, ya que el programador tiene que preocuparse
-únicamente en producir nuevos valores, y no en si ha roto la funcionalidad existente.
+Este cambio de paradigma está de acuerdo con las premisas que se proponían en la introducción de este trabajo. 
+Como las funciones son meras descripciones del valor que devuelven en función de sus entradas, éstas
+pueden ser reusadas sin afectar a otras funciones que ya forman parte dela aplicación. Esto permite
+que los cambios de un sistema se puedan realizar de manera más rápida, ya que el programador tiene que 
+preocuparse únicamente de producir nuevos valores, y no de si éstos afectan a la funcionalidad ya existente.
 
 Además, la Programación Funcional permite un nuevo modelo de razonamiento sobre los
 programas. Dado que las funciones son descripciones de los valores que producen, el
-programador no debe pensar en cómo van a afectar el contexto en el que sean llamadas a
-las funciones en cuestión. Lo único que debe preocuparle es el valor que producen, y es
-por ello que las funciones son más fáciles de producir y de entender. Este principio es
-el que se presentó en el Capítulo 2 como ''Local Reasoning''.
+programador no debe pensar en cómo va a afectar el contexto en el que éstas sean utilizadas. Lo 
+único que debe preocuparle es el valor que éstas producen y es
+por ello que los correspondientes programas son más fáciles de producir y de entender. Este principio es
+el que se presentó en el Capítulo 2 como ``Razonamiento Local''.
 
-Al mismo tiempo, el estudio de la programación reactiva ha proporcionado una serie de
-características que los sistemas deben tener para responder eficientemente a los usuarios.
-La Programación Funcional ha mostrado ser muy apropiada para construir Sistemas Reactivos, ya que ciertos elementos como el manejo explícito de los errores aumenta la resiliencia de
-los programas, reduciendo la cantidad de errores que pueden no ser manejados.
+Al mismo tiempo, el estudio de la programación reactiva ha revelado una serie de
+características que los sistemas deben tener para ser capaces de responder eficientemente a 
+las interacciones con los usuarios.
+La Programación Funcional ha mostrado ser muy apropiada para construir Sistemas Reactivos ya que 
+ciertos elementos, como el manejo explícito de los errores, aumenta la resiliencia de
+los programas, reduciendo la cantidad de errores en un sistema que pueden acanar siendo no controlados.
 
-La programación funcional también introduce un sistema de concurrencia muy seguro.
-Con el tipo de datos \texttt{IO} es muy fácil representar operaciones que van a ser
-procesadas en paralelo, y dado que los programas funcionales no dependen de estado
-mutable compartido algunos problemas tales como una Condición de Secuencia o un Bloqueo
-Mutuo no puedan ocurrir.
+La programación funcional también introduce un sistema para la concurrencia muy seguro.
+Con el tipo de datos \texttt{IO} es muy fácil representar operaciones que pueden ser
+computadas en paralelo y, dado que las distintas partes de un programa funcionale no dependen de un estado
+mutable compartido, algunos problemas típicos de los sistemas concurrentes tales como una 
+Condición de Secuencia o un Bloqueo Mutuo no puedan ocurrir.
 
-Finalmente el modelo de intercambio de mensajes de los Sistemas reactivos está bastante
+Finalmente, el modelo de intercambio de mensajes de los Sistemas reactivos está bastante
 alineado con el estilo de Programación Funcional, dado que los resultados de las funciones
 son simplemente valores producidos por entradas inmutables que pueden considerarse mensajes.
 
-Todo ello hace los Sistemas Funcionales y Reactivos apropiados para la demanda a las que
+Todo ello hace los Sistemas Funcionales y Reactivos apropiados para afrontar las demandas a las que
 se enfrentan las aplicaciones de hoy en día, que no solo tienen que responder rápidamente
-a las interacciones de los usuarios si no adaptarse a los cambios que estos demandan.
+a las interacciones de los usuarios sino adaptarse constantemente a los cambios que éstos demandan.
 
 \subsection{Líneas Futuras}
-Algunos de los conceptos que se han estudiado podrían explorarse en mas profundidad. A continuación
+Algunos de los conceptos que se han estudiado podrían explorarse con más profundidad. A continuación
 se presentan algunos temas que podrían ser estudiados como líneas futuras.
 
 
 \paragraph{Programación Funcional y Teoría de Categorías}
 
-Algunas categorías de Teoría de Categorías se han usado para combinar valores
+Algunas categorías de la Teoría de Categorías se han usado para combinar valores
 en las aplicaciones, tales como las Mónadas o las Categorías de Kleisli. Un estudio
 de los fundamentos de dichas categorías y su relación con la programación funcional
-podría ayudar a escribir programas más expresivos, legítimos y concisos.
+podría ayudar a escribir programas más expresivos, claros y concisos.
 
 \paragraph{Desarrollo de un Sistema Funcional de Actores}
 
-En el documento se ha desarrollado una implementación básica de un actor. Sin embargo
-alguna de las características más avanzadas de algunos Sistemas de Actores como balanceo
-de carga o Árboles de supervisión no se han podido implementar debido al tiempo que
-requeriría. Una implementación que proveyese dichas características haría el uso de actores
+En el documento se ha desarrollado una implementación básica de un actor. Sin embargo,
+alguna de las características más avanzadas de algunos Sistemas de Actores, como el balanceo
+de carga o los árboles de supervisión, no se han podido implementar debido al tiempo que
+requeriría. Una implementación que proporcionase dichas características haría el uso de actores
 más conveniente en el contexto de la Programación Funcional.
 
 \paragraph{Sistemas Imperativos y Reactivos}
 Este documento se ha centrado en el estudio de Sistemas Funcionales y Reactivos.
 Aunque se hayan encontrado beneficios en la combinación de ambos, sería interesante
 estudiar los Sistemas Reactivos dentro del paradigma imperativo, para poder compararlos con
-sus contrapartes funcionales para elegir la opción más apropiada para cada escenario.
+sus contrapartes funcionales y así poder elegir la opción más apropiada para cada escenario.
 
 \end{document}
