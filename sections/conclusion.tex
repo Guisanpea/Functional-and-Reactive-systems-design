@@ -7,9 +7,9 @@ After having studied the Functional Programming paradigm our main conclusion is
 that it provides a mindset shift when producing programs in terms of their
 building blocks.
 
-Imperative programming building blocks are procedures which modify the program
+Imperative programming building blocks are procedures that modify the program
 state. The focus of such procedures in the whole program is not \textit{what} the
-procedure accomplishes but \textit{how} it does accomplishes it. A procedure in
+procedure accomplishes but \textit{how} it does accomplish it. A procedure in
 imperative programming does not have to return a value to do something valuable
 to the application. Procedures are so common that the \textt{void} return type is usually used to
 represent this kind of ``functions'' that, without returning any result, provide a
@@ -22,19 +22,18 @@ functions is \textit{what} they return and not \textit{how} they do it. Because 
 functional programs can be considered as values rather than as a set of
 instructions that modify the program state.
 
-In the end, functional programs interacting with the real world 
-are a description of what operations have to
-be done by terms of an \texttt{IO} monad. This has also been shown with the
+In the end, functional programs interacting with the real world are a description of what operations have to
+be done by terms of an \texttt{IO} Monad. This has also been shown with the
 building blocks used for the companion application. For example, Doobie functions
 returned a \texttt{ConnectionIO} value that was no more than a description of
 the value that would be returned once a \texttt{java.sql.Connection} was
 provided but these functions didn't perform the operations themselves. The Http4s routes built a
 description of what to do with an incoming request but nothing more than that. So,
-it the end, a functional program can be seen as an static description of a series of
+it the end, a functional program can be seen as a static description of a series of
 operations that should be performed. It is not until the program is running that these
 operations finally occur.
 
-This change of paradigm fulfills  the premise that was proposed in the introduction. As
+This change of paradigm fulfills the premise that was proposed in the introduction. As
 functions are mere descriptions of the value they produce, they can be safely
 reused without affecting the already existing application semantics. This enables
 faster changes in functional programs, as the programmer has to be bothered
@@ -44,12 +43,12 @@ functionality.
 Apart from that, Functional Programming enables a new reasoning model for
 programs. Given that functions are mere descriptions of the value they produce,
 the programmer does not have to be judicious on the context in which they are
-called. For the programmer it is only relevant the value they produce and thus,
+called. For the programmer, it is only relevant to the value they produce and thus,
 functions are easier to understand. This concept was presented in Chapter 2 as
-Local Reasoning.
+``Local Reasoning''.
 
-At the same time, the study of reactive systems have provided a set of
-characteristics to look for in systems in order fot them to be responsive. Functional Programming
+At the same time, the study of reactive systems has provided a set of
+characteristics to look for in systems in order for them to be responsive. Functional Programming
 has proven to be a very suitable paradigm for Reactive Applications. Functional programming
 constraints make programs more resilient to effects
 such as errors, which can be enforced to be handled explicitly, reducing in this way
@@ -65,8 +64,8 @@ aligned with the functional style of programming, as functions results are no mo
 a value produced by terms of immutable inputs that can be seen as messages.
 
 All that makes Functional and Reactive Systems appropriate for today's
-applications which need not only to be responsive but that need to adapt quickly
-to change demanded by customers.
+applications demands, because they need not only to be responsive but they need to adapt quickly
+to changes demanded by customers.
 
 \subsection{Future lines of Research}
 Some of the concepts studied in this work could be explored in more depth. Next, we enumerate 
@@ -74,8 +73,8 @@ some topics that could be further studied as an interesting line of future.
 
 \paragraph{Category Theory and Functional Programming}
 
-Some categories from category theory have been used to combine values in the
-application, such as the Monad and Kleisli categories. An study of the
+Some categories from Category Theory have been used to combine values in the
+application, such as the Monad and Kleisli Categories. An study of the
 fundamentals of such categories and their use in functional programming could
 help in writting more expressive, lawful and concise programs.
 

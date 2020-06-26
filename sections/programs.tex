@@ -21,7 +21,7 @@ functional ones. In the case of the study presented in this section, the Cats li
 \autocite{Cats:Home} will be the foundation for building functional programs.
 
 Its documentation describes it as ``a library which provides abstractions for
-functional programming in the Scala programming language. \ldots A broader goal of
+functional programming in the Scala programming language. \ldots \: A broader goal of
 Cats is to provide a foundation for an ecosystem of pure, typeful libraries to
 support functional programming in Scala applications''.
 
@@ -32,10 +32,10 @@ there are also utility type classes, like the Show typeclass which was shown in
 Section 2.
 
 However, Cats doesn't provide any utility for interacting with the real world in
-a functional way. There is a separate project, Cats-effect, \ref{CatsHome}
+a functional way. There is a separate project, Cats-effect, \autocite{CatsHome}
 which ``aims to
 provide a standard IO type for the Cats ecosystem, as well as a set
-of typeclasses (and associated laws) which characterize general effect types.''.
+of typeclasses (and associated laws) which characterize general effect types''.
 This IO type was the one presented in the monads section and its data type
 provide a set of operations to work with I/O operations such as reading from a
 database or communicating through the network.
@@ -52,7 +52,7 @@ developed. It will serve as a basis for an application to organize tennis
 matches.
 
 Two REST resources will be exposed: players and matches. A player will be
-represented with an UUID and a match will involve two players and an optional
+represented with an \texttt{UUID} and a match will involve two players and an optional
 player (the winner).
 
 The methods on these resources will be:
@@ -61,7 +61,7 @@ The methods on these resources will be:
 \item \texttt{POST /\{resource\}}, which will create a new resource on the
   database.
 \item \texttt{GET /\{resource\}/\{id\},} which will return the resource with the
-  given id or a 404 error.
+  given id or a 204 No Content response.
 \item \texttt{DELETE /\{resource\}/\{id\}}, which will delete a resource with the
   given id.
 \end{enumerate}
@@ -89,7 +89,7 @@ The datatype which will be used in our study case is the one provided by FS2,
 an acronym for \textbf{Functional Streams for Scala}, and provides ``purely
 functional, effectful, and polymorphic stream processing'' \autocite{Fs2:Home}.
 
-A fs2 stream has the following type definition \texttt{Stream[+F[\_], +O]}. In
+A FS2 \texttt{Stream} has the following type definition \texttt{Stream[+F[\_], +O]}. In
 this definition \texttt{O} is the type of the elements which are contained in
 the stream and \texttt{F} is the kind which evaluates the effects that the
 descriptions of the values of the streams may have. In our case of study, this
@@ -107,7 +107,7 @@ captionpos=b,
 label={lst:findlinestream}
 ]{FindLine.sc}
 
-When implementing functional programs, Streams will be a good representation when working with
+When implementing functional programs, \texttt{Stream} will be a good representation when working with
 potentially unbounded, non strict and sequential sources of data.
 
 \subsection{Serving a Web Server}
@@ -125,20 +125,20 @@ because the given route may not have an appropiate handler.
 
 \texttt{Request} and \texttt{Response} datatype encode the HTTP requests and
 responses. One interesting element of them is that the body of this request is
-represented with the type \texttt{EntityBody[+F[\_]]}. And when looking at its
-type definition, the entity body is defined as
+represented with the type \\ \texttt{EntityBody[+F[\_]]}. And when looking at its
+type definition, the entity body is defined as\\
 \lstinline{type EntityBody[+F[_]] = Stream[F, Byte]}.
 When defining Http4s, it was mentioned that it provided a streamed model for
 HTTP This streaming model is very important for reactive applications. If a
 request was not streamed, the response time of the web
-server would be
+server would be the following.
 
 \begin{center}
 $(\text{latency of receiving the request and processing} +
 \text{web server operations latency})$
 \end{center}
 
-as the whole request has to be processed on its
+As the whole request has to be processed on its
 entirety before being able to work on it. If the request is streamed, both
 the processing of the request and the operations on them can be interleaved,
 reducing the overall latency of the request. This can also be applied for the
@@ -149,7 +149,7 @@ terms of responsiveness.
 
 To create handlers for HTTP requests, Http4s provides the \texttt{HttpRoutes.of[F]} method, which accepts a partial
 function \texttt{Request => F[Response[F]]} and lifts it into \texttt{OptionT} type,
-being it None in case that the partial function is not defined or Some in case
+being it \texttt{None} in case that the partial function is not defined or \texttt{Some} in case
 it is. For example, the routes for the \texttt{/players} resource of the
 application is presented in Listing \ref{lst:playerresource}.
 
@@ -169,8 +169,8 @@ application is presented in Listing \ref{lst:playerresource}.
   }
 \end{lstlisting}
 
-HttpRoutes has a SemigroupK instance so it provides the \texttt{combineK} method
-for combining a set of routes into a greater router. Thus, with the SemigroupK
+HttpRoutes has a \texttt{SemigroupK} instance so it provides the \texttt{combineK} method
+for combining a set of routes into a greater router. Thus, with the \texttt{SemigroupK}
 instance in place, an application router can be composed from other routes as Listing
 \ref{lst:combineroutes} shows.
 
@@ -188,15 +188,15 @@ instance in place, an application router can be composed from other routes as Li
 \end{lstlisting}
 
 \subsection{Accessing a database}
-For working with persistent data within an IO, Doobie \autocite{Norris2020Doobie}, A functional JDBC layer for Scala,
+For working with persistent data within an IO, Doobie \autocite{Norris2020Doobie}, a functional JDBC layer for Scala,
 provides a monadic API for describing
 queries and commands on a database. Operations in Doobie return descriptions of
 computations within a context. For example the \texttt{ConnectionIO[A]} type
-describes queries and commands that can be expressed when a
+describes queries and commands that can be expressed when a\\
 \texttt{java.sql.Connection} is available and that returns a value of type
-\texttt{A} when interpreted. Internally, ConnectionIO values are represented as a
-free monad. This means that ConnectionIO are combinable with high level
-operators such as flatMap, or even be foldabled. Listing \ref{lst:queryconnectionio} shows an
+\texttt{A} when interpreted. Internally, \texttt{ConnectionIO} values are represented as a
+Free Monad. This means that \texttt{ConnectionIO} are combinable with high level
+operators such as \texttt{flatMap}, or even be foldable. Listing \ref{lst:queryconnectionio} shows an
 example of how to build and combine \texttt{ConnectionIO} values.
 
 \begin{lstlisting}[
@@ -214,17 +214,17 @@ example of how to build and combine \texttt{ConnectionIO} values.
 
 Although these values represent queries to a database, they are agnostic about
 specific details like how or where they are going to be ran. This is
-responsability of the Transactor data type.
+responsability of the \texttt{Transactor} data type.
 
 \texttt{Transactor} has information about the connection details for the
 database but also has information about which execution contexts are being used
 for the different operations on the database. One of them is the
 \texttt{connectEC} in which threads will be waiting for acquiring a database
 connection and also the thread pool in which already connected threads will be
-blocked wating for results. This Transactor is parametrized over an effectful
+blocked wating for results. This \texttt{Transactor} is parametrized over an effectful
 Monad \texttt{F} target.
 
-Once a transactor is available, it can be passed to a ConnectionIO and move the
+Once a \texttt{Transactor} is available, it can be passed to a \texttt{ConnectionIO} and move the
 descriptions to the chosen effectful monad where the description of the
 operations to be performed are no longer dependent on the context of
 \texttt{java.sql.Connection} but operation descriptions deferred on \texttt{IO}
@@ -284,7 +284,7 @@ response times are improved. For this reason Doobie provides a way to return
 database elements in a streamed manner. This combined with HTTP streaming allows
 to improve the overall latency in a great manner.
 
-To return streamed content with Quill, it is only needed to apply the
+To return streamed content with Quill, it is only needed to apply the\\
 \texttt{io.getquill.context.stream} function to the quoted query. If combined
 with the query of Listing \ref{lst:matchquery}, to stream it, it would only be
 needed to do it like \texttt{stream(findAllMatches)}. This query would
@@ -303,9 +303,9 @@ accomplish the three traits that reactive systems have to meet to be responsive.
 Actors, by definition, communicate by means of messages. Actors don't share state nor do they share
 code. They consist of an internal state and only communicate through messages.
 
-Actors implementations such as Erlang processes \ref{EricssonAB2018ErlangProcesses} and Akka Actors \autocite{LightbendInc.2020AkkaActors}
-are also resilient.
-Supervision Trees is the way of having fault tolerant systems within this
+Actors implementations such as Erlang processes \autocite{EricssonAB2018ErlangProcesses} and Akka Actors \autocite{LightbendInc.2020AkkaActors}
+have resilient trees.
+This resilience is implemented through Supervision Trees which is a way of having fault tolerant systems within this
 concurrency model. In a Supervision Tree there are actors whose responsability
 is to monitor the behaviour of actors in the systems. This supervisors are able to
 restart actors and thus gracefully recover from errors in case they occur
@@ -339,7 +339,7 @@ in a Kleisli Category and as long as \texttt{F} has a monad instance, as is the 
 
 As multiple request can come to the actor at a given time, a data structure for
 storing the multiple messages is needed to hold the incoming messages. For this
-purpose fs2 provides a FIFO Queue data structure which holds the messages that
+purpose FS2 provides a FIFO Queue data structure which holds the messages that
 come to the actor.
 
 In this queue, it will not only be saved the input to the actor but also a
@@ -369,7 +369,7 @@ With all these elements the Mailbox implementation is presented in Listing
 \begin{lstlisting}[
 float=h,
 captionpos=b,
-label=lst:matchquery,
+label=lst:mailbox,
 caption={A Purely functional mailbox implementation.}
 ]
   object Mailbox {

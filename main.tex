@@ -53,6 +53,13 @@
 \begin{document}
 
 %% Cover
+\includepdf[noautoscale=true, width=\paperwidth]{cover.pdf}
+
+
+%% Title
+\cleardoublepage
+\setcounter{page}{1}
+
 \includepdf[noautoscale=true, width=\paperwidth]{title.pdf}
 
 \newpage
@@ -85,6 +92,9 @@
 \section{Conclusions and Futures Lines of Research}
 \subfile{sections/conclusion}
 
+\section{Conclusiones y Líneas Futuras}
+\subfile{sections/conclusiones}
+
 %% Bibliography
 \printbibliography
 
@@ -100,4 +110,6 @@
 
 \end{umaappendices}
 
+%% Back Cover
+\includepdf[noautoscale=true, width=\paperwidth]{backcover.pdf}
 \end{document}

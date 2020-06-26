@@ -44,7 +44,7 @@ This function breaks the definition of a pure function. In figure
 \ref{fig:readLineN}, a Scala interactive session is ran with the previous
 function defined. In this session, it can be observed that for the same function input,
 \texttt{2}, two different outputs are returned, \texttt{res1: Int = 5} and \texttt{res2:
-  Int = 6}, which is a violation of the definition of pure function given before.
+  Int = 6}, when the user introduces the inputs 3 and 4 respectively in the console, which is a violation of the definition of pure function given before.
 
 \begin{figure}[ht]
   \centering \includegraphics[width=0.5\textwidth]{readline}
@@ -78,7 +78,7 @@ process is showcased.
 
 \begin{figure}[ht]
   \centering
-  $ 2x - x = \sqrt{16} + 2 \cdot 2$
+  $ 2x - x = 2^{2} + 2 \cdot 2$
 
   $ x = 4 + 4$
 
@@ -159,7 +159,7 @@ been completely overriden.
 
 These examples are rather small and thus it is not that difficult to understand
 the context, but in an enterprise application where there are many more
-components, the solution doesn't scale that well. As the uses of the mutable
+components, the solution does not scale that well. As the uses of the mutable
 state increase, the understanding of functions which use them start to be more
 complex.
 
@@ -408,7 +408,7 @@ object oriented language \autocite{Oliveira2010TypeImplicits}.
 To illustrate the example, a typeclass called \texttt{Show} is presented in
 Listing \ref{lst:showtypeclass} with some instances. This typeclass is very
 illustrative because in Scala there is a \texttt{toString} method in the
-\texttt{Any} class[[Add reference to API]] which every class must extend but it
+\texttt{Any} class\autocite{ScalaScala.Anyb} which every class must extend but it
 is very error prone as its default implementation returns the \texttt{hashCode} of the
 class, which may not be the wanted implementation. In case that the programmer
 forgets to override the method, the error can only be caught at run time. When
