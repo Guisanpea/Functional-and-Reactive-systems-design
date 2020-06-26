@@ -8,7 +8,7 @@
 \begin{document}
 
 \subsection{Abstracting over Computational Effects}
-In 1991 Eugenio Moggi \autocite{MoggiNotionsMonads} described a model
+In 1991 Eugenio Moggi \autocite{Moggi1991NotionsMonads} described a model
 in category theory for separating the set of values a object of type \texttt{A} may have from
 the notion of computing those values, \texttt{T A}, which denotes an effect on top of
 this type. This model abstracts from type \texttt{A} the possible
@@ -118,7 +118,7 @@ the interpretation of the side effects, which is usually done as the last step o
 the computation. Usually, in order to avoid running the execution of the side
 effects manually, the entry function of the application expects an IO to be
 returned which will be then be interpreted. This is exactly what the main method
-of Haskell does \autocite{AIO}.
+of Haskell does\autocite{Hudak2000AIO}.
 
 Alternatively, the IO datatype can be thought of as an state transformer over 
 the state not belonging to the program itself but to the external world. When
@@ -132,7 +132,7 @@ programmer has to explicitly deal with the effect and can not ignore the
 effectful nature of it, like having a possible error, an Either effect, or being a possibly
 future value, i. e. an IO effect.
 
-This implicit treatment of effects, just like the use of a \texttt{Null} pointer, has
+This implicit treatment of effects, just like the use of a \texttt{null} pointer, has
 lead to great a number of mistakes, being called by Tony Hoare, one of the first designers of
 programming languages, his billion dolar mistake \autocite{NullMistake}.
 

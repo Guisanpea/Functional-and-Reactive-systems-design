@@ -10,7 +10,7 @@ perform their actions, which would break referential transparency.
 
 One first approach to deal with this problem would be to decide having ``mostly
 functional'' programs. The problem is that this not completely functional
-programming model does not work\autocite{MeijerTheWork}. Thinking that
+programming model does not work\autocite{Meijer2014TheWork}. Thinking that
 this mixture would give the benefits of functional programs is a
 fallacy. Referential transparency is given or not, there is no middle ground. If
 some of the elements which compose a program are not referentially transparent,
@@ -139,7 +139,7 @@ $(\text{latency of receiving the request and processing} +
 \end{center}
 
 As the whole request has to be processed on its
-entirety before being able to work on it. If the request is streamed, both
+entirety before being able to work on it this processing time will have to be added to the operations time. If the request is streamed, both
 the processing of the request and the operations on them can be interleaved,
 reducing the overall latency of the request. This can also be applied for the
 response, as the response body is also modeled as an \texttt{EntityBody}. By
@@ -245,7 +245,7 @@ even be validated at compile time against the database resulting in a
 compilation error in case that the mapping has been incorrectly done.
 
 Quill query model is based in ``a  practical  theory  of  language-integrated
-query  based  on quotation and normalisation of quoted terms'' \autocite{CheneyAQuery} and
+query  based  on quotation and normalisation of quoted terms'' \autocite{Cheney2013AQuery} and
 is able not only to map case classes to database queries but to provide
 database queries as for comprehensions and normalization of nested queries to
 provide efficient database access for applications.
@@ -293,7 +293,7 @@ nevertheless need to be transacted as any other Doobie request.
 \subsection{Making systems reactive with actors}
 The main trait which made systems reactive was the use of message passing. One
 tool that can be used for modeling message driven architectures is the Actor
-model. Its origin dates back to  1973 \autocite{HewittAFormalism}, when they were shown as a way to
+model. Its origin dates back to  1973 \autocite{Hewitt1973AFormalism}, when they were shown as a way to
 model artificial intelligence. At a later moment in 1985 the Actor Model was
 presented as a model of concurrency for distributed systems \autocite{Agha1985ACTORS:Systems}.
 
@@ -331,7 +331,7 @@ To design such actor every element will be analyzed to come up with
 an implementation fulfilling the requirements.
 
 Firstly, a mechanism for receiving request and obtaining a
-response is needed. It will be called a Mailbox and this will be a type representing a function
+response is needed. It will be called a Mailbox and this will be a type representing a function \\
 \lstinline{mailbox: Input => F[Output]}. As one of the concerns with actors was
 composability, this mailbox is highly composable as this function can be wrapped
 in a Kleisli Category and as long as \texttt{F} has a monad instance, as is the case of
