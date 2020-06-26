@@ -47,27 +47,27 @@ a safe wrapper of a Scala app which expects an \texttt{IO} and runs it, hence en
 that programs can remain purely functional without exposing any kind of impurity.
 
 \subsection{The case of study}
-For putting in practice the concepts acquired a web application will be
-developed. It will serve as a base for an application to organize tennis
+For putting into practice the concepts we are studying, a simple web application will be
+developed. It will serve as a basis for an application to organize tennis
 matches.
 
-Two REST resources will be exposed. Players and matches. A player will be
-represented with an UUID and a Match will have two players and an optional
-player.
+Two REST resources will be exposed: players and matches. A player will be
+represented with an UUID and a match will involve two players and an optional
+player (the winner).
 
-The methods on this resources will be
+The methods on these resources will be:
 \begin{enumerate}
-\item \texttt{GET /\{resource\}} which will obtain all the resources saved.
-\item \texttt{POST /\{resource\}} which will create a new resource on the
+\item \texttt{GET /\{resource\}}, which will obtain all the resources saved.
+\item \texttt{POST /\{resource\}}, which will create a new resource on the
   database.
-\item \texttt{GET /\{resource\}/\{id\}} which will return the resource with the
-  given id or a 404 error
-\item \texttt{DELETE /\{resource\}/\{id\}} which will delete a resource with the
-  given id
+\item \texttt{GET /\{resource\}/\{id\},} which will return the resource with the
+  given id or a 404 error.
+\item \texttt{DELETE /\{resource\}/\{id\}}, which will delete a resource with the
+  given id.
 \end{enumerate}
 
 The resources will be \texttt{players} and \texttt{matches} and they will be
-persistent in a PostgreSQL Relational Database,
+persistent in a PostgreSQL relational database,
 
 \subsection{Representing lazy sequences with Streams}
 One of the main concerns of the \texttt{IO} datatype is to separate computation
@@ -85,7 +85,7 @@ this specific computation can be expressed using \texttt{IO}, the lazy
 representation for obtaining the lines from the file can not be expressed by it. For this
 reason, the Stream datatype is created.
 
-The datatype which will be used in our study case is the one provided by FS2,
+The datatype which will be used in our study case is the one provided by FS2, 
 an acronym for \textbf{Functional Streams for Scala}, and provides ``purely
 functional, effectful, and polymorphic stream processing'' \autocite{Fs2:Home}.
 
@@ -145,6 +145,7 @@ reducing the overall latency of the request. This can also be applied for the
 response, as the response body is also modeled as an \texttt{EntityBody}. By
 providing a streamed model of HTTP, the applications reactivity is increased by
 terms of responsiveness.
+% de nuevo, a veces http (en minúscula) y otras Http. Hazlo consistente
 
 To create handlers for HTTP requests, Http4s provides the \texttt{HttpRoutes.of[F]} method, which accepts a partial
 function \texttt{Request => F[Response[F]]} and lifts it into \texttt{OptionT} type,

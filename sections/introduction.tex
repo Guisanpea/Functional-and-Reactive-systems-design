@@ -3,91 +3,91 @@
 \begin{document}
 
 \subsection{Motivation}
-Software systems nowadays are having an unprecedented amount of changing
+Software systems are demanding nowadays an unprecedented amount of changing
 requirements. As more people have gained access to personal computers, and more
-lately mobile devices the amount of users an application could have have
-increased greatly. In the past software was developed using a waterfall model,
-target users were localized and systems were made to satisfy their needs with
-their requirements were known a priori.
+lately mobile devices, the amount of users an application must serve has
+increased dramatically. In the past, software was developed using a waterfall model.
+Target users were localized and systems were made to satisfy their needs with
+their requirements being known a priori.
 
-This scenario is no longer true. Today's users expect software that adapt to their
-needs and in many cases have plenty of alternatives to choose. If an application
-is not able to accommodate to the user demands they can browse or
-download another one in matter of seconds to minutes at the same time.
+This scenario is no longer true. Today's users expect software that adapts to their
+needs and in many cases have plenty of alternatives to choose from. If an application
+is not able to accommodate to the user demands, they can browse or
+download another one in matter of seconds to minutes.
 
-With that premise in mind is now more than ever construct applications that are
-evolutionary, able to adapt and easily maintainable. This is exactly what
+With that premise in mind, it is now required more than ever to construct applications that are
+evolutionary, able to adapt and easy to maintain. This is exactly what
 Functional Programming aims to achieve. Functional programs are composed of
-functions that are highly composable and that require low maintenance. This
+functions that are highly composable and that require low maintenance. These
 functions are guaranteed to maintain their behavior regardless of external
-changes. And as they are free of side effects they provide a seamless
+changes. Additionally, as they are free of side effects, they provide a seamless
 reutilization experience given that they produce no observable result other than
-producing the expected use being safe to use regardless of the context in which
+producing a result, so that they are safe to use regardless of the context in which
 they are called.
 
-With that characteristics refactoring is safe because one change of a function
-cannot produce a side effect that could affect the functions which are not using
+Due to these characteristics, refactoring is safe because one change in a function
+cannot produce a side effect that could affect other functions which are not using
 it.
 
-As users demand new features more frequently expecting, no degrading of already
-existing behaviour changes are expected to happen occur on code often and having such
+As users demand new features more frequently, additionally expecting no degradation of already
+existing behaviours, changes are expected to occur on code often and having such
 properties of functional programs is very desirable in this context.
 
 At the same time, the non functional requirements of software systems have been
 growing to be more strict. Nowadays not only human beings consume applications,
-the so called Internet of things has been growing massively starting to be
-ubiquitously present, from home automation to agriculture there are devices
+the so called Internet of Things has been growing massively, starting to be
+ubiquitously present. From home automation to agriculture there are devices
 which connect to the internet to do their work. This can make services to be
 consumed by millions of clients simultaneously.
 
-When developing web applications they must be able to scale to this
+When developing web applications, they must be able to scale to this
 circumstances and work under high loads without affecting the user experience
-and the application responsiveness. The Reactive System term have been then coined to
+and the application responsiveness. The Reactive System term have been coined to
 describe a series of traits and elements that form software applications which
-accomplish this characteristics.
+accomplish these characteristics.
 
 \subsection{Objectives}
-Firstly, in this document it is going to be exposed what is functional
-programming, the characteristics of functional programs and the benefits that
-they provide to software systems. At the same times it is going to be showcased
-in a practical basis how to create functional programs in the Scala programming
-languages and why it is a suitable language for making functional programs.
+Firstly, in this document it is going to be exposed what Functional
+Programming is, the characteristics of functional programs and the benefits that
+they provide to software systems. At the same time, it is going to be showcased
+in a practical way how to create functional programs in the Scala programming
+language\autocite{Scala} and why this is a suitable language for writting functional programs.
 
-Secondly it will introduce what are reactive systems, as a principled way to
+Secondly, it will be introduced what reactive systems are, as a principled way to
 structure applications that are able to scale and be responsive for users and how to
 create them in the context of Functional Programming, combining the benefits of
-systems that are able to change and have a good performance
+systems that are able to change and have good performance.
 
-The end goal will be to create a basic set of principles for functional
-programming which will allow the programmer not only to recognize what makes
-programs functional but to get the most benefit from them. At the same time common
-patterns and elements of functional programs will be shown to help to earn the
-greatest profit in this paradigm.
+The end goal will be to create a basic set of principles for Functional
+Programming which will allow the programmer not only to recognize what makes
+programs functional but also to get the most benefits from them. At the same time common
+patterns and elements of functional programs will be introduced to help to earn the
+greatest profit from this paradigm.
 
-Finally a web application made with purely functional constructs will be
+Finally, a simple web application built with purely functional constructs will be
 developed. This will showcase how Functional Programming can be used to create
-applications that interact with the real world and that at the same time have
+applications that interact with the real world and that, at the same time, have
 the reactive traits, thus being both easily adaptable to change and good performant.
 
 \subsection{Structure of the document}
-The structure of the document is aligned with the objectives. Chapter 2
-will introduce the Functional Programming paradigm along with the principles and
-benefits of it.
+The structure of the document is aligned with the objectives of this work. Chapter 2
+will introduce the Functional Programming paradigm along with its principles and
+benefits.
 
-Chapter 3 will explain then the concept of Reactive Systems, how they relate to
+Chapter 3 will define the concept of Reactive Systems, how they relate to
 well performing applications and what makes a system reactive.
 
-Both chapters will thus serve as a study of the state of the art and understand the
-pillars of both topics to be able to base the rest of the document on this fundamentals.
+Both chapters will thus serve as a study of the state of the art in order to understand the
+pillars behind both topics to be able to base the rest of the document on these fundamentals.
 
-In Chapter 4 after these fundamentals are known is going to show elements common to
-both reactive and functional programs. In it some common structures in
-Functional Programming will be presented, at the same time and context there are
-also going to be elements of programs that enable reactiveness on an application.
+In Chapter 4, after these fundamentals are known, elements common to
+both reactive and functional programs are goinf to be introduced. Some common structures in
+Functional Programming will be presented as long as elements of programs that enable reactiveness 
+for an application.
 
-With the knowledge acquired from previous chapters, Chapter 5 is exploring the
-companion application to this document, exploring a web application based on
-both functional and reactive traits. It will introduce a way of interacting with
+With the knowledge acquired in previous chapters, Chapter 5 will explore the
+companion application to this document. I will be a simple web application based on
+both functional and reactive traits. We will introduce a way of interacting with
 the external world in a functional manner and how an application can be
 structured based on purely functional constructs.
 

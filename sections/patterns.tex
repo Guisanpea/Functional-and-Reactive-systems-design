@@ -13,7 +13,7 @@ in category theory for separating the set of values a object of type \texttt{A} 
 the notion of computing those values, \texttt{T A}, which denotes an effect on top of
 this type. This model abstracts from type \texttt{A} the possible
 results that the computation could have. Some examples of computations mentioned
-on that text, of interest to this topics are:
+on that text of interest to this topics are:
 
 \begin{itemize}
 \item Side effects, that modify a set of possible states \texttt{S}: \texttt{State[A, S]}.
@@ -24,11 +24,12 @@ on that text, of interest to this topics are:
 From a functional programming perspective, a very interesting finding of that
 work is that thess effects over type \texttt{A} can be abstracted over and we can define
 operations that transform the type A regardless of the effect in which it is
-contained, as long as the effect \texttt{F} is a monad.
+contained, as long as the effect \texttt{F} is a monad. %% Has a monad?
+                                %% Is a monad?
 
 \subsubsection{Monads}
 A monad is category that provides two operations over a type constructor
-\texttt{F[\_]}: \texttt{flatMap}, also usually called \texttt{bind}, and \texttt{pure},
+\texttt{F[\_]}: \texttt{flatMap}, also usually called b\texttt{bind}, and \texttt{pure},
 known as point or return. In Listing \ref{lst:monad}, a trait that defines the
 Monad typeclass in Scala is shown.
 
@@ -119,11 +120,11 @@ effects manually, the entry function of the application expects an IO to be
 returned which will be then be interpreted. This is exactly what the main method
 of Haskell does \autocite{AIO}.
 
-At the same time it can be thought of IO as a datatype encoding the representation
-of the state not belonging to the program itself but the external world. When
-interpreted this state is read through external ports, i.e.
-network card; peripherals; storage disk, \ldots while at the same time is also  able
-to produce an state change on this external elements
+Alternatively, the IO datatype can be thought of as an state transformer over 
+the state not belonging to the program itself but to the external world. When
+interpreted, this state is read through external ports, i.e.
+network card, peripherals, storage disk, \ldots and, at the same time, the new produced 
+state can be ``written" to these external elements.
 
 \subsubsection{The resilience of Computational Effects}
 In statically typed programming languages, computational effects offer a greater resilience as the
@@ -229,7 +230,7 @@ variable without losing referential transparency as Listing \ref{lst:pureio} sho
 
 The project Cats Effect \autocite{CatsHome} provides a standard \texttt{IO} type for
 Scala. This \texttt{IO} type provides both synchronous and asynchronous evaluation
-models. this IO datatype provides an asynchronous processing model similar to
+models. In addtion, this IO datatype provides an asynchronous processing model similar to
 Future but referentially transparent.
 
 \lstinputlisting[

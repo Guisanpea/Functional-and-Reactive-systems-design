@@ -3,95 +3,96 @@
 \begin{document}
 
 \subsection{Conclusions}
-After having studied the Functional Programming paradigm the main conclusion is
+After having studied the Functional Programming paradigm our main conclusion is
 that it provides a mindset shift when producing programs in terms of their
 building blocks.
 
-Imperative programs building blocks are procedures which modify the program
+Imperative programming building blocks are procedures which modify the program
 state. The focus of such procedures in the whole program is not \textit{what} the
 procedure accomplishes but \textit{how} it does accomplishes it. A procedure in
 imperative programming does not have to return a value to do something valuable
-to the application. It is so common that the void return type is usually used to
-represent this kind of functions that although returning no value provides a
-meaningful value to the application.
+to the application. Procedures are so common that the \textt{void} return type is usually used to
+represent this kind of ``functions'' that, without returning any result, provide a
+meaningful purpose to the application.
 
-By contrast, in functional programs the building blocks are functions. This
+By contrast, in functional programs, the fundamental building blocks are functions. These
 functions are seen as opaque representations of the value they return. For this
-reason programs are rather declarative than imperative. The focus of this
-function is \textit{what} they return and not \textit{how} they do it. For this
-reason functional programs can be considered as values rather than a set of
+reason, programs are rather declarative than imperative. The focus of these
+functions is \textit{what} they return and not \textit{how} they do it. Because of this,
+functional programs can be considered as values rather than as a set of
 instructions that modify the program state.
 
-At the very end functional programs are a description of what operations have to
-be done by terms of an \texttt{IO} monad, this has also been seen with the
-building blocks of the companion application. For example Doobie functions
-returned a \texttt{ConnectionIO} value that was no more than a description that
+In the end, functional programs interacting with the real world 
+are a description of what operations have to
+be done by terms of an \texttt{IO} monad. This has also been shown with the
+building blocks used for the companion application. For example, Doobie functions
+returned a \texttt{ConnectionIO} value that was no more than a description of
 the value that would be returned once a \texttt{java.sql.Connection} was
-provided but didn't do the operations itself. The Http4s routes built a
-description of what to with an incoming request but nothing more than that. So
-at the end a functional program is an static description of a series of
-operations to be performed it is not until the program is interpreted that the
+provided but these functions didn't perform the operations themselves. The Http4s routes built a
+description of what to do with an incoming request but nothing more than that. So,
+it the end, a functional program can be seen as an static description of a series of
+operations that should be performed. It is not until the program is running that these
 operations finally occur.
 
-This change of paradigm allows the premise proposed in the introduction. As
-functions are merely descriptions of the value they produce they can be safely
-reused without affecting the already existing application semantics. This enable
-faster changes in the functional programs, as the programmer has to be bothered
-only about producing new value and not of breaking existing program
+This change of paradigm fulfills  the premise that was proposed in the introduction. As
+functions are mere descriptions of the value they produce, they can be safely
+reused without affecting the already existing application semantics. This enables
+faster changes in functional programs, as the programmer has to be bothered
+only about producing new values and not about breaking existing program
 functionality.
 
-Apart from that, functional programming enables a new reasoning model for
-programs. Given that functions are mere descriptions of the value they produce
+Apart from that, Functional Programming enables a new reasoning model for
+programs. Given that functions are mere descriptions of the value they produce,
 the programmer does not have to be judicious on the context in which they are
 called. For the programmer it is only relevant the value they produce and thus,
 functions are easier to understand. This concept was presented in Chapter 2 as
 Local Reasoning.
 
-At the same time the study of reactive systems have given a set of
-characteristics to look for in systems to be responsive. Functional Programming
-has proven to be a very suitable paradigm for Reactive Applications. The
-functional programming constraints make programs more resilient with effects
-such as Errors needed to be handled explicitly, reducing the amount of possible
-errors.
+At the same time, the study of reactive systems have provided a set of
+characteristics to look for in systems in order fot them to be responsive. Functional Programming
+has proven to be a very suitable paradigm for Reactive Applications. Functional programming
+constraints make programs more resilient to effects
+such as errors, which can be enforced to be handled explicitly, reducing in this way
+the possibility of having unhandled errors.
 
-The functional programming model enables at the same time a safer concurrent
-model. With the IO datatype is easy to describe computations that will be
-processed in parallel and with functional programs not relying on mutable shared
-state some problems such as race conditions and deadlocks are not present.
+The functional programming model also enables a very safe concurrent
+model. With the IO datatype, it is easy to describe computations that will be
+processed in parallel and, with functional programs not relying on mutable shared
+state, some problems such as race conditions and deadlocks are not present.
 
-Finally the immutable message passing semantics of Reactive Systems are very
-aligned with the functional style of programming, as functions are no more than
-a value produce by terms of its immutable input that can be seen as a message.
+Finally, the immutable message passing semantics of Reactive Systems are very
+aligned with the functional style of programming, as functions results are no more than
+a value produced by terms of immutable inputs that can be seen as messages.
 
-All that makes Functional and Reactive systems appropriate for today's
-applications which needs not only to be responsive but that need to adapt quick
-to change to customers.
+All that makes Functional and Reactive Systems appropriate for today's
+applications which need not only to be responsive but that need to adapt quickly
+to change demanded by customers.
 
 \subsection{Future lines of Research}
-After this study some concepts have been explored very lightly that could be
-interesting to study in depth such as
+Some of the concepts studied in this work could be explored in more depth. Next, we enumerate 
+some topics that could be further studied as an interesting line of future.
 
 \paragraph{Category Theory and Functional Programming}
 
 Some categories from category theory have been used to combine values in the
 application, such as the Monad and Kleisli categories. An study of the
 fundamentals of such categories and their use in functional programming could
-help to have more expressive, lawful and concise programs.
+help in writting more expressive, lawful and concise programs.
 
-\paragraph{Development of a functional Actor System}
+\paragraph{Development of a Functional Actor System}
 
-An actor implementation based on functional elements have been developed in the
-companion application but it didn't have features of more advanced Actor Systems
-on other languages such as supervision trees or load balancing which are very
-useful have been omitted. Having an implementation which would improve this
-elements would make working with actors more convenient
+An actor implementation based on functional elements have been developed for the
+companion application but it didn't provide some features available in more advanced Actor Systems
+such as supervision trees or load balancing. These are really 
+useful but have been omitted in our system due to lack of time. Having an implementation which would provide
+theses elements would make working with actors more convenient.
 
 \paragraph{Imperative and Reactive Systems}
 
-In this document the main element of study have been Functional and Reactive
-systems. Although some benefits have been found it would be interesting to study
+In this document the main element of study has been Functional and Reactive
+systems. Although some benefits have been found, it would be interesting to study
 Reactive systems in an imperative paradigm, to compare them with their
-functional counterpart to be able to choose the most suitable option for a given
+functional counterparts and to be able to choose the most suitable option for a given
 scenario.
 
 \end{document}
