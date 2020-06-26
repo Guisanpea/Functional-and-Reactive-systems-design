@@ -9,6 +9,7 @@ respecto a los elementos con los que éstos se construyen.
 
 Los elementos con los que se construyen los programas imperativos son procedimientos
 que modifican el estado global del programa. Estos procedimientos no se centran exclusivamente
+<<<<<<< HEAD
 en el valor que producen sino, adenás, en el \textit{cómo} se producen. Un procedimiento en programación
 imperativa no tiene porque devolver un resultado para realizar algo constructivo en la aplicación.
 Esto es tan habitual que en los lenguajes imperativos existe un tipo, \textt{void}, que se utiliza
@@ -21,6 +22,20 @@ mismo los programas funcionales se consideran declarativos más que imperativos 
 dichas funciones se centran en \texit{qué} valores deben devolver, y no en \texttt{cómo} 
 devolverlos. Así, los programas funcionales se pueden interpretar como valores más que como 
 una serie de instrucciones que modifican un estado global.
+=======
+en el valor que producen si no en el \textit{cómo} lo producen. Un procedimiento en programación
+imperativa no tiene por que devolver un resultado para realizar algo constructivo en la aplicación.
+Tan es así que en los lenguajes imperativos existe un tipo \texttt{void} que puede declararse
+como devuelto por las funciones que no devuelven un valor en sí, sino que modifican el estado global
+como propósito.
+
+Sin embargo en la programación funcional los bloques elementales son funciones. Estas
+funciones se pueden ver como representaciones opacas del valor que devuelven. Por eso
+mismo los elementos de programas funcionales se consideran declarativos más que imperativos.
+Porque se centran en \textit{qué} valores devuelven, y no en \texttt{cómo} los devuelven.
+Por eso mismo los programas funcionales se pueden considerar valores más que una serie de
+instrucciones que modifican un estado global.
+>>>>>>> upstream/master
 
 Al final, los programas funcionales que interactúan con el mundo real son descripciones de
 las operaciones a realizar dentro del contexto de una Mónada IO \texttt{IO}. Esto se ha visto
