@@ -4,7 +4,7 @@ import scala.util.Random
 
 val ioByVariable = {
   val random = new Random(0L)
-  val x = IO(random.nextInt)
+  val x: IO[Int] = IO(random.nextInt)
   for {
     a <- x
     b <- x

@@ -4,18 +4,18 @@ import scala.util.Random
 
 val futureByVariable = {
   val random = new Random(0L)
-  val x = Future(random.nextInt)
+  val x: Future[Int] = Future(random.nextInt)
   for {
-    a <- x
-    b <- x
+    a: Int <- x
+    b: Int <- x
   } yield (a, b)
 }
 
 val futureByComposition = {
   val random = new Random(0L)
   for {
-    a <- Future(random.nextInt)
-    b <- Future(random.nextInt)
+    a: Int <- Future(random.nextInt)
+    b: Int <- Future(random.nextInt)
   } yield (a, b)
 }
 
