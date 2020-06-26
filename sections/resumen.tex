@@ -1,0 +1,30 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+%% begin abstract format
+\makeatletter
+\renewenvironment{abstract}{%
+    \if@twocolumn
+      \section*{Resumen \\}%
+    \else %% <- here I've removed \small
+    \begin{flushright}
+        {\filleft\Huge\bfseries\fontsize{48pt}{12}\selectfont Resumen\vspace{\z@}}%  %% <- here I've added the format
+        \end{flushright}
+      \quotation
+    \fi}
+    {\if@twocolumn\else\endquotation\fi}
+\makeatother
+%% end abstract format
+\begin{abstract}
+Dado que los usuarios hoy en día requieren cambios en el software más constantes, es necesario tener unos fundamentos de programación que permitan realizar cambios de una manera simple. Los elementos de Programación Funcional son fáciles de componer y libres de efectos colateral. Es por ello que este documento estudia la programación funcional como paradigma para crear programas que pueden adaptarse a cambios al ritmo que los requisitos evolucionan. Al mismo tiempo la capacidad de responder rápidamente a las interacciones del usuario crece en importancia y es por ello que los Sistemas Reactivos establecen un marco de referencia para crear aplicaciones que son capaces de responder con una baja latencia y que son tolerantes a fallos.
+
+Estos conceptos no son presentados exclusivamente de un punto de vista teórico sino que también se acompañan de ejemplos prácticos y patrones útiles para crear Sistemas Funcionales y Reactivos
+
+Finalmente, se estudia un caso de uso práctico en el que se desarrollan todos los elementos que se han estudiado, implementando una aplicación que utilizan almacenamiento persistente y comunicación a través de HTTP de una forma puramente funcional bajo los principios reactivos.
+
+\bfseries{\large{Palabras Clave:} Programación Funcional, Scala, Sistemas Reactivos}
+
+\end{abstract}
+\end{document}
+
+
