@@ -9,7 +9,7 @@ respecto a los elementos con los que éstos se construyen.
 
 Los elementos con los que se construyen los programas imperativos son procedimientos
 que modifican el estado global del programa. Estos procedimientos no se centran exclusivamente
-en el valor que producen sino, adenás, en el \textit{cómo} se producen. Un procedimiento en programación
+en el valor que producen sino, además, en el \textit{cómo} se producen. Un procedimiento en programación
 imperativa no tiene porque devolver un resultado para realizar algo constructivo en la aplicación.
 Esto es tan habitual que en los lenguajes imperativos existe un tipo, \texttt{void}, que se utiliza
 para declarar el tipo devuelto por las ``funciones'' cuyo propósito no es devolver un valor sino  
@@ -35,7 +35,7 @@ Por eso mismo los programas funcionales se pueden considerar valores más que un
 instrucciones que modifican un estado global.
 
 Al final, los programas funcionales que interactúan con el mundo real son descripciones de
-las operaciones a realizar dentro del contexto de una Mónada IO \texttt{IO}. Esto se ha visto
+las operaciones a realizar dentro del contexto de una Mónada \texttt{IO}. Esto se ha visto
 a la hora de crear los bloques que formarían la aplicación que acompaña a este documento. Por ejemplo,
 las funciones de Doobie devolvían un valores de tipo \texttt{ConnectionIO} que no eran más que
 descripciones de los valores que se devolverían una vez que se proporcione una \texttt{java.sql.Connection}.
@@ -69,7 +69,7 @@ computadas en paralelo y, dado que las distintas partes de un programa funcional
 mutable compartido, algunos problemas típicos de los sistemas concurrentes tales como una 
 Condición de Secuencia o un Bloqueo Mutuo no puedan ocurrir.
 
-Finalmente, el modelo de intercambio de mensajes de los Sistemas reactivos está bastante
+Finalmente, el modelo de intercambio de mensajes de los Sistemas Reactivos está bastante
 alineado con el estilo de Programación Funcional, dado que los resultados de las funciones
 son simplemente valores producidos por entradas inmutables que pueden considerarse mensajes.
 
